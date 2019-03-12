@@ -6,6 +6,9 @@
                             <h2>
                                 <?= $heading ?> LIST
                             </h2>
+                       <div class="card-tools pull-right">
+                          <a href="<?= base_url('vendor/add_vendor'); ?>" class="btn btn-success">Add Vendor</a>
+                   </div> 
                             
                         </div>
                         <div class="body">
@@ -36,9 +39,9 @@
                                             <td><?= $row['created_at'] ?></td>
                                             <td>
                                                 <div class="btn-group" role="group">
-                                                <a href="<?= base_url() ?>staff/edit/<?= $row['id'] ?>" class="btn btn-primary waves-effect"><i class="material-icons">create</i></a>
+                                                <a href="<?= base_url() ?>vendor/update/<?= $row['id'] ?>" class="btn btn-primary waves-effect"><i class="material-icons">create</i></a>
                                                  
-                                                  <button type="button" class="btn btn-danger" onclick="delFunction(<?php echo $row['id'] ?>);" data-toggle="tooltip" data-placement="top" title="Delete"><i class="material-icons">delete</i></button>
+                                                 <!--  <button type="button" class="btn btn-danger" onclick="delFunction(<?php echo $row['id'] ?>);" data-toggle="tooltip" data-placement="top" title="Delete"><i class="material-icons">delete</i></button> -->
                                             </div>
                                         </td>
                                            

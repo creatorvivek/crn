@@ -33,7 +33,9 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="radio" name="validity_unit" id="male" class="with-gap" value="day" required="">
+                                    <input type="radio" name="validity_unit" id="radio1" class="with-gap" value="once" required="">
+                                    <label for="radio1">Once</label>
+                                    <input type="radio" name="validity_unit" id="male" class="with-gap" value="day" >
                                     <label for="male">Day</label>
 
                                     <input type="radio" name="validity_unit" id="female" class="with-gap" value="month">

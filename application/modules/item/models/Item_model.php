@@ -108,7 +108,24 @@ function purchase_list($table_name,$condition,$content_display)
     }
     return array();   
  }
+##used in ajax
+function fetch_item_details($table_name,$condition,$content_display)
+{
+ $this->db->select($content_display);
+    $this->db->from($this->$table_name);
+    if(!is_null($condition))
+      $this->db->where($condition);
+    $this->db->join($this->table_item,''.$this->$table_name.'.item_id='.$this->table_item.'.id');
+    $this->db->join($this->table_vendor,''.$this->$table_name.'.vendor_id='.$this->table_vendor.'.id');
+    // $this->db->join($this->table_staff,''.$this->$table_name.'.created_by='.$this->table_staff.'.id');
 
-
+    // $this->db->join($this->table_item,''.$this->$table_name.'.item_id='.$this->table_item.'.id');
+    $data= $this->db->get()->result_array();
+    if($data){
+      
+    return $data;
+    }
+    return array();   
+}
 ##end of class
 }

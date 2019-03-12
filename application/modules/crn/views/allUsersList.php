@@ -2,7 +2,7 @@
   <div class="col-md-12">
     <div class="card">
       <div class="card-tools pull-right">
-          <a href="<?= site_url('crn/add_crn'); ?>" class="btn btn-success ">Add</a>
+          <a href="<?= site_url('crn/add_crn'); ?>" class="btn btn-success ">Add Customer</a>
         </div> 
         <form action="<?= base_url() ?>crn/customer_list" method="post">
       <div class="body">

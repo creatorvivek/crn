@@ -15,22 +15,22 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
 
     <!-- Bootstrap Core Css -->
-    <link href="<?= base_url() ?>assets/admin/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="<?= base_url() ?>assets/admin/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Waves Effect Css -->
     <link href="<?= base_url() ?>assets/admin/plugins/node-waves/waves.css" rel="stylesheet" />
 
     <!-- Animation Css -->
-    <link href="<?= base_url() ?>/assets/admin/plugins/animate-css/animate.css" rel="stylesheet" />
+  
 
     <!-- Morris Chart Css-->
     <!-- <link href="<?= base_url() ?>/assets/admin/plugins/morrisjs/morris.css" rel="stylesheet" /> -->
 
     <!-- Custom Css -->
-    <link href="<?= base_url() ?>/assets/admin/css/style.css" rel="stylesheet">
+    <link href="<?= base_url() ?>/assets/admin/css/style.min.css" rel="stylesheet">
 
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
-    <link href="<?= base_url() ?>/assets/admin/css/themes/all-themes.css" rel="stylesheet" />
+    <link href="<?= base_url() ?>/assets/admin/css/themes/all-themes.min.css" rel="stylesheet" />
 
     <link href="<?= base_url() ?>/assets/admin/plugins/sweetalert/sweetalert.css" rel="stylesheet" />
     <script src="<?= base_url() ?>/assets/admin/plugins/jquery/jquery.min.js"></script>
@@ -278,7 +278,7 @@ function IdleTimeout() {
                         <span>ADD ITEM</span>
                     </a>
                 </li>
-                <li class="<?php if ($this->uri->segment(2) == 'add_item') {
+                <li class="<?php if ($this->uri->segment(2) == 'add_purchase') {
                         echo 'active';
                     } ?>">
                     <a href="<?= base_url() ?>item/add_purchase">
@@ -578,8 +578,37 @@ function IdleTimeout() {
     </li>
 </ul>
 </li>
+
+ <li class="<?php if ($this->uri->segment(1) == 'quotation') {
+                                echo 'active';
+                            } ?>">
+                            <a href="javascript:void(0);" class="menu-toggle">
+                                <i class="material-icons">widgets</i>
+                                <span>QUOTATION</span>
+                            </a>
+
+                            <ul class="ml-menu">
+
+                                <li class="<?php if ($this->uri->segment(3) == 'make_quotation') {
+                                    echo 'active';
+                                } ?>">
+                                <a href="<?= base_url() ?>quotation/make_quotation">
+                                    <i class="material-icons">layers</i>
+                                    <span>ADD QUOTATION</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<?= base_url() ?>quotation/quotation_list">
+                                    <i class="material-icons">layers</i>
+                                    <span>QUOTATION LIST</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+
 <?php if ($this->session->authorization_id == 2) { ?>
- <li class="<?php if ($this->uri->segment(1) == 'report') {
+ <li class="<?php if ($this->uri->segment(1) == 'log') {
     echo 'active';
 } ?>">
 <a href="javascript:void(0);" class="menu-toggle">

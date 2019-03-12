@@ -60,15 +60,7 @@ $data['_view'] = 'service_list';
 $this->load->view('index',$data);
 
 }
-function fetch_service()
-{
-// $condition=array('f_id'=>$f_id);
-$item_id = $this->input->post('item_id');
-    $params = array('id' => $item_id);
-$service=$this->Service_model->select('table_services',$params,array('*'));
 
-echo json_encode($service[0]);
-}
 
 function service_edit($id)
 {   
@@ -110,7 +102,7 @@ function service_update($id)
     $this->Service_model->update_col('table_services',$condition,$serviceParams);
     $this->session->alerts = array(
       'severity'=> 'success',
-      'title'=> 'successfully added'
+      'title'=> 'successfully updated'
 
     );
     redirect('service/service_list');
@@ -122,7 +114,7 @@ function fetch_service()
     $f_id = $this->session->f_id;
     $params = array('f_id' => $f_id,'id'=>$service_id);
     $service = $this->Service_model->select('table_services', $params, array('id','service_name','amount','validity','validity_unit'));
-    echo json_encode($service);
+    echo json_encode($service[0]);
   }
 
 

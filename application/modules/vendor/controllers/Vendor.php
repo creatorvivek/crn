@@ -38,7 +38,7 @@ function add()
  
    $this->load->library('form_validation');
   
-  // $this->form_validation->set_rules('name','Name','required|trim|alpha_numeric_spaces');
+  $this->form_validation->set_rules('name','Name','required|trim|alpha_numeric_spaces');
 
   // $this->form_validation->set_rules('email','Email','required|valid_email|trim');
   // $this->form_validation->set_rules('address','Address','required|trim');
@@ -80,14 +80,10 @@ function add()
       'title'=> 'succesfully add'
 
     );
-    if($this->input->get('redirect'))
-    {
-      redirect('sales/sale_add');
-    }
-    else
-     { 
+  
+    
     redirect('vendor/vendor_list');
-  }
+  
   }
 }
 else
@@ -100,7 +96,7 @@ else
 
 function vendor_list()
 {
-   $data['heading']='Vendor';
+   $data['heading']='VENDOR';
 $f_id=$this->session->f_id;
 $this->load->model('Vendor_model');
 $condition=array('vendor.f_id'=>$f_id);
@@ -112,6 +108,85 @@ $condition=array('vendor.f_id'=>$f_id);
 
 
 }
+function update($id)
+{
+
+  $data['title']="EDIT VENDOR";
+  $f_id=$this->session->f_id;
+  $params=array('id'=>$id,'f_id'=> $f_id);
+
+    ##details of group 
+ $this->load->model('Vendor_model');
+ $data['vendor']= $this->Vendor_model->select('table_vendor',$params,array('*'));
+    // var_dump($data['customer']);die;
+  if(isset($data['vendor'][0]['id']))
+  {
+    $this->load->library('form_validation');
+
+ // var_dump($data['customer']);
+    $this->form_validation->set_rules('name','Name','required');
+    if($this->form_validation->run() )     
+    {   
+      $f_id=$this->session->f_id;
+        $staff_id=$this->session->staff_id;
+        $name = strip_tags($this->input->post('name',1));
+        $company_name = strip_tags($this->input->post('company_name',1));
+        // $type=strip_tags($this->input->post('type',1));
+        $email = strip_tags($this->input->post('email',1));
+        $mobile = strip_tags($this->input->post('mobile',1));
+        $city = strip_tags($this->input->post('city',1));
+        $gender=strip_tags($this->input->post('gender',1));
+        $location = strip_tags($this->input->post('address',1));
+        $pincode = strip_tags($this->input->post('pincode',1));
+ 
+      $updateVendorParams=array(
+      
+       
+    'name' => $name,
+    'company_name'=>$company_name,
+    'email' =>$email,
+    'mobile' => $mobile,
+    'address' => $location,
+    'pincode'=>$pincode,
+
+    'city'=>$city,
+   
+    'gender'=>$gender,
+   
+        
+      );
+       
+      $update=$this->Vendor_model->update_col('table_vendor',$params,$updateVendorParams);
+
+     if($update)
+     {
+     
+     $this->session->alerts = array(
+      'severity'=> 'success',
+      'title'=> 'succesfully updated'
+
+    );
+     redirect('vendor/vendor_list');
+   }
+
+
+
+   
+ }
+   else
+   {
+    $data['_view'] = 'edit';
+    $this->load->view('index',$data);
+  }
+ 
+}
+else
+  show_error('The id you are trying to edit does not exist.');
+} 
+
+
+
+
 
 
 }

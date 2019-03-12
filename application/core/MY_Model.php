@@ -54,6 +54,9 @@ class MY_Model extends CI_Model
 
   public $table_vendor="vendor";
   public $table_purchase="purchase_item";
+  public $table_quotation="quotation";
+  public $table_quotation_details="quotation_details";
+  public $table_item_graph="item_report";
 
 
 

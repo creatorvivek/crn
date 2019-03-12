@@ -50,8 +50,8 @@ $f_id = $this->session->f_id;
     $data['title'] = 'ITEM LIST';
     $f_id = $this->session->f_id;
     $staff_id = $this->session->staff_id;
-    $params = array('item.f_id' => $f_id, 'status' => 1);
-    $itemList = $this->Item_model->stock_list('table_item', $params, array('item.id', 'item_name', 'description', 'selling_price', 'purchase_price', 'model_no', 'serial_no', 'item.created_by', 'item.created_at', 'category', 'staff.name as staff_name','quantity','unit','quantity_out'));
+    $params = array('item_list.f_id' => $f_id);
+    $itemList = $this->Item_model->stock_list('table_item', $params, array('item_list.id', 'item_name', 'description', 'item_list.created_by', 'item_list.created_at', 'category', 'staff.name as staff_name','snp'));
     // print_r($itemList);die;
    // echo '<pre>';
     $categoryParam = array('f_id' => $f_id);
@@ -230,7 +230,7 @@ function add_item_process()
 
   $itemParams = array(
 
-    'item_name' => $item_id,
+    'item_name' =>$item_name,
     'description' => $description,
     'category' => $item_category,
 
@@ -256,12 +256,12 @@ function add_item_process()
 function purchase_list()
 {
   $f_id = $this->session->f_id;
-$condition = array('item.f_id' => $f_id);
+$condition = array('purchase_item.f_id' => $f_id);
  $categoryParam = array('f_id' => $f_id);
    
     $category = $this->Item_model->select('table_category', $categoryParam, array('category_id', 'name'));
     $data['category'] = $category;
-$data['purchase']=$this->Item_model->purchase_list('table_purchase',$condition,array('item.id','item.selling_price','item.purchase_price','item.quantity','item.quantity_out','item.item_company','item.quantity_for_sale','item.unit','item.created_at','staff.name as staff_name','vendor.name as vendor_name','item_list.item_name','item_list.category'));
+$data['purchase']=$this->Item_model->purchase_list('table_purchase',$condition,array('purchase_item.id','purchase_item.selling_price','purchase_item.purchase_price','purchase_item.quantity','purchase_item.quantity_out','purchase_item.item_company','purchase_item.quantity_for_sale','purchase_item.unit','purchase_item.created_at','staff.name as staff_name','vendor.name as vendor_name','item_list.item_name','item_list.category'));
 // echo '<pre>';
 // print_r($data['purchase']);
 $data['_view'] = 'purchase_list';
@@ -273,9 +273,9 @@ $data['_view'] = 'purchase_list';
 function fetch_amount()
 {
   $item_id = $this->input->post('item_id');
-  $params = array('id' => $item_id);
-  $item = $this->Item_model->purchase_list('table_item', $params, array('id', 'selling_price', 'description', 'item_name','quantity','unit'));
-   // print_r($item[0]['selling_price']);
+  $params = array('purchase_item.id' => $item_id);
+  $item = $this->Item_model->fetch_item_details('table_purchase', $params, array('purchase_item.id', 'selling_price', 'item_name','quantity','unit'));
+   // print_r($item);
   echo json_encode($item[0]);
 
 

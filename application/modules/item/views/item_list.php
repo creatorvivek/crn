@@ -16,13 +16,13 @@
                                         <tr>
                                             <th>Item Name</th>
                                             <th>Description</th>
-                                            <th>Purchase Price</th>
-                                            <th>Selling Price</th>
+                                            <th>Snp Number</th>
+                                            <!-- <th>Selling Price</th> -->
                                             <!-- <th>Serial No</th> -->
-                                            <th>Stock</th>
+                                            <!-- <th>Stock</th> -->
 
-                                            <th>Unit</th>
-                                            <th>Qty sell</th>
+                                            <!-- <th>Unit</th> -->
+                                            <!-- <th>Qty sell</th>/ -->
                                             <th>Adding By</th> 
                                             <th>Category</th>
                                             <th>Action</th>
@@ -36,13 +36,13 @@
                                         <tr>
                                             <td><?= $row['item_name'] ?></td>
                                             <td><?= $row['description'] ?></td>
-                                            <td><?= $row['purchase_price'] ?></td>
-                                            <td><?= $row['selling_price'] ?></td>
+                                            <!-- <td><?= $row['purchase_price'] ?></td> -->
+                                            <!-- <td><?= $row['selling_price'] ?></td> -->
                                             <!-- <td><?= $row['serial_no'] ?></td> -->
                                             <!-- <td><?= $row['model_no'] ?></td> -->
-                                            <td><?= $row['quantity'] ?></td>
-                                            <td><?= $row['unit'] ?></td>
-                                            <td><?= $row['quantity_out'] ?></td>
+                                            <!-- <td><?= $row['quantity'] ?></td> -->
+                                            <!-- <td><?= $row['unit'] ?></td> -->
+                                            <td><?= $row['snp'] ?></td>
                                             <td><?= $row['staff_name'] ?></br><?= $row['created_at'] ?></td>
                                             <td>
                                             <?php foreach($category as $row2)
@@ -58,7 +58,7 @@
                                              <td>
                                             	<div class="btn-group" role="group">
                                             	<a data-toggle="tooltip" title="Add Edit" href="<?= base_url() ?>item/edit_item/<?= $row['id'] ?>" class="btn btn-primary waves-effect"><i class="material-icons">create</i></a>
-                                            	<a data-toggle="tooltip" title="Add Quantity" href="<?= base_url() ?>item/add_more_item/<?= $row['id'] ?> " class="btn btn-success waves-effect"><i class="material-icons">add</i></a>
+                                            	<!-- <a data-toggle="tooltip" title="Add Quantity" href="<?= base_url() ?>item/add_more_item/<?= $row['id'] ?> " class="btn btn-success waves-effect"><i class="material-icons">add</i></a> -->
                                             </div>
                                             </td>
                                     <!-- <button type="button" class="btn btn-default waves-effect">LEFT</button>

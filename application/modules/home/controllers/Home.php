@@ -147,21 +147,6 @@ $totalPendingInvoiceCredit=modules::run('api_call/api_call/call_api',''.api_url(
 
 
 
-function salesChart()
-{
-$f_id=$this->session->f_id;
-$salesParam=array('f_id'=>$f_id);
-$results =modules::run('api_call/api_call/call_api',''.api_url().'admin/salesChartData',$salesParam,'POST');
-// var_dump($ledgerResults);
-    if($results['status']=='success')
-    {
-      echo json_encode($results['data']);
-    }
-    else
-    {
-       echo json_encode([]);
-    }
-}
 
 
 
@@ -173,12 +158,12 @@ function stock_count()
   $f_id=$this->session->f_id;
   // $f_id=1;
     $totalStockParam=array('f_id'=>$f_id);
-    $data['total_stock']=$this->Home_model->sum_column('table_item',$totalStockParam,'quantity');
+    $data['total_stock']=$this->Home_model->sum_column('table_purchase',$totalStockParam,'quantity');
   
     $sellStockParam=array('f_id'=>$f_id);
-    $data['sell_stock']= $this->Home_model->sum_column('table_sales_details',$sellStockParam,'quantity');
+    // $data['sell_stock']= $this->Home_model->sum_column('table_sales_details',$sellStockParam,'quantity');
    
-    $data['total_stock_amount']=$this->Home_model->sum_column('table_item',$totalStockParam,'total_purchase_price');
+    $data['total_stock_amount']=$this->Home_model->sum_column('table_purchase',$totalStockParam,'total_purchase_price');
  
     $condition=array('f_id'=>$f_id);
     $data['this_month_stock_sell']=$this->Home_model->data_current_count('table_item',array('*'),$sellStockParam,"'%y-%m-01'");
@@ -194,7 +179,7 @@ function account_dashboard()
   $todayInvoice=array('f_id'=>$f_id,'date(created_at)'=>date('Y-m-d'));
   $data['today_invoices']=$this->Home_model->counting('table_invoices',$todayInvoice);
   $totalStockAmount=array('f_id'=>$f_id);
-  $data['total_stock_amount']=$this->Home_model->sum_column('table_item',$totalStockAmount,'total_purchase_price');
+  $data['total_stock_amount']=$this->Home_model->sum_column('table_purchase',$totalStockAmount,'total_purchase_price');
    $data['total_payment']=$this->Home_model->sum_column('table_payment_details', $totalInvoiceParam,'amount');
   $todayCondition =array('Date(created_at)'=>date(date('Y-m-d')),'f_id'=>$f_id );
 $yesterdayCondition=array('Date(created_at)'=>date('Y-m-d',strtotime("-1 days")),'f_id'=>$f_id);

@@ -17,7 +17,7 @@
             <!-- Widgets -->
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                            <a href="<?=  base_url() ?>item/item_list" class="underline" data-toogle="tooltip" title="click to view">
+                            <a href="<?=  base_url() ?>item/purchase_list" class="underline" data-toogle="tooltip" title="click to view">
                     <div class="info-box bg-pink hover-expand-effect">
                         <div class="icon">
                             <i class="material-icons">shopping_cart</i>
@@ -671,8 +671,9 @@
             
              <!-- Chart Plugins Js -->
     <script src="<?= base_url() ?>assets/admin/plugins/chartjs/Chart.bundle.js"></script>
+    <script src="<?= base_url() ?>/assets/admin/plugins/jquery-countto/jquery.countTo.js"></script>
 
-    <!-- <script src="<?= base_url() ?>assets/admin/js/pages/charts/chartjs.js"></script> -->
+   
     <script type="text/javascript">
    $(document).ready(function(){  
     stock();

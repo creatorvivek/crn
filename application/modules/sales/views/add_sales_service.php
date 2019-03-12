@@ -137,7 +137,7 @@ input:-webkit-autofill + label {
                 <?php  foreach($items as $row)
                 {
                   ?>
-                  <option value="<?= $row['id'] ?>" ><?= $row['item_name'] ?></option>
+                  <option value="<?= $row['id'] ?>" data-toggle="tooltip" title="sss"><?= $row['item_name'] .'     '. $row['description']          ?>    </option>
                 <?php } ?>
               </select>
             </div>
@@ -539,6 +539,7 @@ function test_two(id)
 $.ajax({
   type: "post",
   url: "<?= base_url() ?>item/fetch_amount",
+  async: false,
   data:{item_id:item_id,<?= $this->security->get_csrf_token_name();?>:"<?= $this->security->get_csrf_hash();?>"},
   success: function (data) {
     var obj=JSON.parse(data);
@@ -552,15 +553,10 @@ var new_row = '<tr id="row'+count+'">'+
 '<td class="text-center">'+
 '<input type="text" min=0 max="'+obj.quantity +'"  name="qty[]"   value="1"  onkeypress="return isNumberKey(event)"  onkeyup="changeQuantity('+count+')" class="text-center qty'+count+'" ><br><small class="small_unit">'+obj.unit+'</small></td>'+
 
-
-                          // '<td class="text-center taxAmount">'+d +'</td>'+
-
-                          '<td class="text-center"><input type="text" class="form-control text-center discount'+count+'" name="discount[]" onkeyup="discount('+count+')" data-input-id="'+count+'" id="discount_id_'+count+'" max="100" min="0"></td>'+
-                          '<td class="text-center"><input class="form-control text-center amount amount_item'+count+'" type="text" amount-id = "'+count+'" id="amount_'+count+'" value="'+obj.selling_price+'" name="item_price[]" ></td><input type="hidden" name="item_id[]" class="item_id" value="'+obj.id+'">'+
-                          '<td class="text-center"><button type="button" id="'+count+'" onclick="deleteRow('+count+')" class="btn btn-danger delete_item"><i class="material-icons">delete</i></button></td>'+
-                          '<input type="hidden" class="amount_hidden'+count+'" value="'+obj.selling_price +'" ><input type="hidden"  name="unit[]" value="'+obj.unit +'" > '
-
-                          '</tr>';
+'<td class="text-center"><input type="text" class="form-control text-center discount'+count+'" name="discount[]" onkeyup="discount('+count+')" data-input-id="'+count+'" id="discount_id_'+count+'" max="100" min="0"></td>'+
+'<td class="text-center"><input class="form-control text-center amount amount_item'+count+'" type="text" amount-id = "'+count+'" id="amount_'+count+'" value="'+obj.selling_price+'" name="item_price[]" ></td><input type="hidden" name="item_id[]" class="item_id" value="'+obj.id+'">'+
+'<td class="text-center"><button type="button" id="'+count+'" onclick="deleteRow('+count+')" class="btn btn-danger delete_item"><i class="material-icons">delete</i></button></td>'+
+'<input type="hidden" class="amount_hidden'+count+'" value="'+obj.selling_price +'" ><input type="hidden"  name="unit[]" value="'+obj.unit +'" ></tr>';
 
                           $(new_row).insertAfter($('table tr.dynamicRows:last'));
                           count++;
@@ -574,7 +570,6 @@ var new_row = '<tr id="row'+count+'">'+
 function service(id)
 {
  
-   $('#error_item').hide();
   var service_id=$('#service'+id).val();
   if(service_id)
   {
@@ -587,31 +582,28 @@ function service(id)
 $.ajax({
   type: "post",
   url: "<?= base_url() ?>service/fetch_service",
+     async: false,
   data:{service_id:service_id,<?= $this->security->get_csrf_token_name();?>:"<?= $this->security->get_csrf_hash();?>"},
   success: function (data) {
-    console.log(data);
+    // console.log(data);
     var obj=JSON.parse(data);
     console.log(obj);
 // alert(obj);
-$('.amount'+id).val(obj.selling_price);
+// $('.amount'+id).val(obj.selling_price);
 
-var new_row = '<tr id="row'+count+'">'+
-'<td class="text-center"><input type="hidden" name="item_name[]" value="'+obj.service_name +'">'+obj.service_name +'</td>'+
-'<td class="text-center><input type="text" class="text-center" name="stock" readonly value="'+obj.validity +'">'+obj.validity +'  (<small class="small_unit">'+obj.validity_unit+'</small>)</td>'+
-'<td class="text-center">'+
-// '<input type="text" min=0 max="'+obj.quantity +'"  name="qty[]"   value="1"  onkeypress="return isNumberKey(event)"  onkeyup="changeQuantity('+count+')" class="text-center qty'+count+'" ><br><small class="small_unit">'+obj.unit+'</small></td>'+
+var new_row_service = '<tr id="row'+count+'">'+
+  '<td class="text-center"><input type="hidden" name="item_name[]" value="'+obj.service_name +'">'+obj.service_name +'</td>'+
+  '<td class="text-center><input type="hidden" class="text-center" name="stock" readonly value="'+obj.validity +'">validity    (<small class="small_unit">'+obj.validity_unit+'  service </small>)</td>'+
+  '<td class="text-center">'+
+  '<input type="hidden" min=0   name="qty[]"   value="1"   ></td>'+
 
-
-                          // '<td class="text-center taxAmount">'+d +'</td>'+
-
-                          '<td class="text-center"><input type="text" class="form-control text-center discount'+count+'" name="discount[]" onkeyup="discount('+count+')" data-input-id="'+count+'" id="discount_id_'+count+'" max="100" min="0"></td>'+
-                          '<td class="text-center"><input class="form-control text-center amount amount_item'+count+'" type="text" amount-id = "'+count+'" id="amount_'+count+'" value="'+obj.selling_price+'" name="item_price[]" ></td><input type="hidden" name="service_id[]" class="item_id" value="'+obj.id+'">'+
+  '<td class="text-center"><input type="text" class="form-control text-center discount'+count+'" name="discount[]" onkeyup="discount('+count+')" data-input-id="'+count+'" id="discount_id_'+count+'" max="100" min="0"></td>'+
+                          '<td class="text-center"><input class="form-control text-center amount amount_item'+count+'" type="text" amount-id = "'+count+'" id="amount_'+count+'" value="'+obj.amount+'" name="item_price[]" ></td><input type="hidden" name="service_id[]" class="item_id" value="'+obj.id+'">'+
                           '<td class="text-center"><button type="button" id="'+count+'" onclick="deleteRow('+count+')" class="btn btn-danger delete_item"><i class="material-icons">delete</i></button></td>'+
-                          '<input type="hidden" class="amount_hidden'+count+'" value="'+obj.amount +'" ><input type="hidden"  name="unit[]" value="'+obj.validity_unit +'" > '
-
-                          '</tr>';
-
-                          $(new_row).insertAfter($('table tr.dynamicRows:last'));
+                          '<input type="hidden" class="amount_hidden'+count+'" value="'+obj.amount +'" ><input type="hidden"  name="unit[]" value="'+obj.validity_unit +'" ></tr>';
+                          // console.log(new_row_service);
+                           // var new_rows='hhhhhhhhhh';
+                          $(new_row_service).insertAfter($('table tr.dynamicRows:last'));
                           count++;
          
                 total();
@@ -663,8 +655,13 @@ function total()
 }
 function discount(id)
 {
-
-  var qty= $('.qty'+id).val();
+  // var qty=1;
+ var qty= $('.qty'+id).val();
+ if(qty=='undefined' || qty==null || qty=='' )
+ {
+  qty=1;
+ }
+ // console.log(qty);
   var discount= $('.discount'+id).val();
    // var amount= $('.amount_item'+id).val();
    var basic_amount= $('.amount_hidden'+id).val();

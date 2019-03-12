@@ -33,7 +33,9 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="radio" name="validity_unit" id="male" class="with-gap" value="day" required="" <?php if($service[0]['validity_unit']=='day') { echo 'checked'; } ?>  >
+                                     <input type="radio" name="validity_unit" id="radio1" class="with-gap" value="once" required="" <?php if($service[0]['validity_unit']=='once') { echo 'checked'; } ?>>
+                                    <label for="radio1">Once</label>
+                                    <input type="radio" name="validity_unit" id="male" class="with-gap" value="day"  <?php if($service[0]['validity_unit']=='day') { echo 'checked'; } ?>  >
                                     <label for="male">Day</label>
 
                                     <input type="radio" name="validity_unit" id="female" class="with-gap" value="month" <?php if($service[0]['validity_unit']=='month') { echo 'checked'; } ?> >

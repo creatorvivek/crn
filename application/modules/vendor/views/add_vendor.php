@@ -47,7 +47,7 @@
                                 </div>
                                  <div class="form-group form-float">
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="pincode" required="" aria-required="true" onkeypress="return isNumberKey(event)">
+                                        <input type="text" class="form-control" name="pincode" required="" aria-required="true" maxlength="6" onkeypress="return isNumberKey(event)">
                                         <label class="form-label">Pincode</label>
                                     </div>
                                 </div>

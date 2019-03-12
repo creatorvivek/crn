@@ -1,4 +1,4 @@
-
+<link href="<?= base_url() ?>/assets/admin/plugins/animate-css/animate.css" rel="stylesheet" />
 
 <div class="row clearfix">
   <div class="col-lg-16 col-md-12 col-sm-12 col-xs-12">

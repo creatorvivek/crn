@@ -2,55 +2,61 @@
                 <div class="col-lg-16 col-md-6 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
-                            <h2>ADD CUSTOMER</h2>
+                            <h2>UPDATE VENDOR</h2>
                             
                         </div>
                         <div class="body">
-                            <form id="form_validation" method="POST" novalidate="novalidate" action="<?= base_url() ?>crn/add_crn_process">
+                            <form id="form_validation" method="POST"  action="<?= base_url() ?>vendor/update/<?= $vendor[0]['id'] ?>">
                                 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name();?>" value="<?php echo $this->security->get_csrf_hash();?>">
                                 <div class="form-group form-float">
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="name" required="" aria-required="true" >
-                                        <label class="form-label">Name</label>
+                                        <input type="text" class="form-control" name="name" required="" value="<?= ($this->input->post('name') ? $this->input->post('name') : $vendor[0]['name']); ?>" aria-required="true" >
+                                        <label class="form-label">Vendor Name</label>
+                                    </div>
+                                </div>
+                                 <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" name="company_name" required="" aria-required="true" value="<?= ($this->input->post('company_name') ? $this->input->post('company_name') : $vendor[0]['company_name']); ?>" >
+                                        <label class="form-label">Vendor Company Name</label>
                                     </div>
                                 </div>
                                 <div class="form-group form-float">
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="mobile" required="" aria-required="true" onkeypress="return isNumberKey(event)" maxlength="10">
+                                        <input type="text" class="form-control" value="<?= ($this->input->post('mobile') ? $this->input->post('mobile') : $vendor[0]['mobile']); ?>"  name="mobile"  required="" aria-required="true" onkeypress="return isNumberKey(event)" maxlength="10">
                                         <label class="form-label">Mobile</label>
                                     </div>
                                 </div>
                                 <div class="form-group form-float">
                                     <div class="form-line">
-                                        <input type="email" class="form-control" name="email" required="" aria-required="true">
+                                        <input type="email" class="form-control" name="email" required="" aria-required="true" value="<?= ($this->input->post('email') ? $this->input->post('email') : $vendor[0]['email']); ?>">
                                         <label class="form-label">Email</label>
                                     </div>
                                 </div>
 
                               <div class="form-group form-float">
                                 <div class="form-line">
-                                  <textarea class="form-control" name="address" required></textarea>
-                                  <label class="form-label">Addesss</label>
+                                  <textarea class="form-control" name="address" required><?= $vendor[0]['address'] ?></textarea>
+                                  <label class="form-label">Address</label>
                                 </div>
                               </div>
                               <div class="form-group form-float">
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="city" required="" aria-required="true" onkeypress="return isAlpha(event)">
+                                        <input type="text" class="form-control" name="city" required="" aria-required="true" onkeypress="return isAlpha(event)" value="<?= ($this->input->post('city') ? $this->input->post('city') : $vendor[0]['city']); ?> ">
                                         <label class="form-label">City</label>
                                     </div>
                                 </div>
                                  <div class="form-group form-float">
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="pincode" required="" aria-required="true" onkeypress="return isNumberKey(event)" maxlength="6">
+                                        <input type="text" class="form-control" name="pincode" required="" aria-required="true" maxlength="6" onkeypress="return isNumberKey(event)" value="<?= ($this->input->post('pincode') ? $this->input->post('pincode') : $vendor[0]['pincode']); ?>" >
                                         <label class="form-label">Pincode</label>
                                     </div>
                                 </div>
           
                                 <div class="form-group">
-                                    <input type="radio" name="gender" id="male" class="with-gap" value="male">
+                                    <input type="radio" name="gender" id="male" class="with-gap" value="male" <?php if($vendor[0]['gender']=='male'){ echo 'checked';  } ?> >
                                     <label for="male">Male</label>
 
-                                    <input type="radio" name="gender" id="female" class="with-gap" value="female">
+                                    <input type="radio" name="gender" id="female" class="with-gap" value="female" <?php if($vendor[0]['gender']=='female'){ echo 'checked';  } ?>  >
                                     <label for="female" class="m-l-20">Female</label>
                                 </div>
                                
@@ -93,32 +99,7 @@
 
 
 <script type="text/javascript">
-function usernameValidation()
-{
-var username=$('#username').val();
-$.ajax({
-type: "post",
-url: "<?= base_url() ?>crn/usernameCheck",
-data:{username:username},
-success: function (data) {
-// alert(data);
-var obj=JSON.parse(data)
-// var result=datas;
-if(obj.length>0)
-{
 
-$('.username_error').html('This username is already exist');
-$('.username_error').css('color','red');
-}
-else
-{
-$('.username_error').html('This username is avilable');
-$('.username_error').css('color','green');
-}
-// console.log(obj);
-},
-})
-}
 function validateMobile()
 {
 var mobile=$('#mobile').val();

@@ -63,12 +63,13 @@ class Sales extends MY_Controller
 
       $condition = array('id' => $item_id[$i]);
       ##fetch item quantity 
-      $quantity=$this->Sales_model->select('table_item',$condition,array('quantity'));
-      $reamaning_item=$quantity[0]['quantity']-$qty[$i];
+      $quantity=$this->Sales_model->select('table_purchase',$condition,array('quantity_for_sale','purchase_price','item_id'));
+      $reamaning_item=$quantity[0]['quantity_for_sale']-$qty[$i];
       $quantity_out=$quantity[0]['quantity_out'];
+      ##update how much quantity out and how much reamaning for sales
       $quantity_out_update = $quantity[0]['quantity_out']+$qty[$i];
-      $itemParams = array('quantity' => $reamaning_item,'quantity_out'=>$quantity_out_update);
-      $this->Sales_model->update_col('table_item', $condition, $itemParams);
+      $itemParams = array('quantity_for_sale' => $reamaning_item,'quantity_out'=>$quantity_out_update);
+      $this->Sales_model->update_col('table_purchase', $condition, $itemParams);
 
     ##inserts sale details
       $saleDetailsParam = array(
@@ -81,6 +82,23 @@ class Sales extends MY_Controller
         'discount_percent'=>$discount[$i]
       );
       $addSalesDetails = $this->Sales_model->insert('table_sales_details', $saleDetailsParam);
+
+      ##for profit loss graph
+
+      $profitLossParam=array(
+        'item_purchase_id'=>$item_id[$i],
+        'item_id'=>$quantity[0]['item_id'],
+        'purchase_price'=>$quantity[0]['purchase_price'],
+        'selling_price'=>round($amount[$i]/$qty[$i]),
+        'qty'=>$qty[$i],
+        'created_at'=>$date,
+        'f_id'=>$f_id
+
+
+      );
+       $addGraphDetails = $this->Sales_model->insert('table_item_graph',$profitLossParam);
+      /*end profit loss graph*/
+
     }
     $particularParam = array(
       'particular' => $item_name,
@@ -170,12 +188,12 @@ class Sales extends MY_Controller
   {
 
     $f_id = $this->session->f_id;
-  // echo $f_id;die;
-    $params = array('item_list.f_id' => $f_id);
-    $item = $this->Sales_model->select_item('table_item', $params, array('purchase_item.id', 'item_name', 'item_list.description'));
+    
+    $params = array('item_list.f_id' =>$f_id);
+    $item = $this->Sales_model->select_item('table_item',$params, array('purchase_item.id','item_name','item_list.description','purchase_price'));
     $condition=array('f_id'=>$f_id);
     $data['service']=$this->Sales_model->select('table_services',$condition,array('*'));
-  // print_r($item);die;
+    
     $data['items'] = $item;
     $data['_view'] = 'add_sales_service';
     $this->load->view('index', $data);
@@ -518,6 +536,7 @@ function sales_order_view($order_id)
 } 
 function payment_status()
 {
+    $payment_id= modules::run('account/account/get_payment_id');
   $f_id = $this->session->f_id;
   $staff_id = $this->session->staff_id;
   $invoice_id = trim($this->input->post('invoice_id',1));
@@ -535,7 +554,8 @@ function payment_status()
     'amount' => $paid,
     'order_reference' => $order_reference,
     'payment_date' => $payment_date,
-    'customer_id'=>$customer_id
+    'customer_id'=>$customer_id,
+    'payment_id'=>$payment_id
 
 
   );

@@ -366,33 +366,53 @@ function reciept_report()
   $this->load->view('index.php',$data);
 }
 
+// function profit_analysis()
+// {
+
+// $f_id=$this->session->f_id;
+// $condition=array('f_id'=>$f_id);  
+// // $sumPurchase=$this->Reports_model->salesAnalysis('table_item_graph',$condition,$purchase_condition);
+
+// ##last 1 month profit
+//   $duration='INTERVAL 3 MONTH';
+//   $data['sumSales']=$this->Reports_model->data_between_date('table_sales',array("MONTHNAME(created_at) as month","sum(total) as 'sell_total'"),$condition,$duration,$coloumn='created_at','MONTH','MONTH');
+
+//   $data['sumPurchase']=$this->Reports_model->data_between_date('table_purchase',array("MONTHNAME(created_at) as month","sum(total_purchase_price) as 'purchase_total'","sum(purchase_price*quantity_for_sale) as 'stock reamaning'"),$condition,$duration,$coloumn='created_at','MONTH','MONTH');
+//   // $stockPriceReamaning =  $this->Reports_model->data_between_date('table_purchase',array("MONTHNAME(created_at) as month","sum(purchase_price*quantity_for_sale) as 'stock reamaning'"),$condition,$duration,$coloumn='created_at');
+//   // print_r($stockPriceReamaning);
+//   // $this->output->enable_profiler(TRUE);
+//    // $profit= $sumSales-$sumPurchase + $stockPriceReamaning[0]['sum'];
+// // echo $stockPriceReamaning ;
+// // echo '<br>';
+//   echo json_encode($data);
+
+// }
+
 function profit_analysis()
 {
-
-$f_id=$this->session->f_id;
+  $f_id=$this->session->f_id;
 $condition=array('f_id'=>$f_id);  
-// $sumPurchase=$this->Reports_model->salesAnalysis('table_item_graph',$condition,$purchase_condition);
+  if ($_SERVER['REQUEST_METHOD'] == 'POST' ) {
+  $date_range = explode(' - ',$this->input->post('date_range'));
+  $start_date = date_change_db($date_range[0]);
+  
 
-##last 1 month profit
-  $duration='INTERVAL 1 MONTH';
-  $sumSales=$this->Reports_model->data_between_date('table_sales',array("MONTHNAME(created_at) as month","sum(total) as 'sell_total'"),$condition,$duration,$coloumn='created_at');
+  $end_date = date_change_db($date_range[1]);
 
-  $sumPurchase=$this->Reports_model->data_between_date('table_purchase',array("MONTHNAME(created_at) as month","sum(total_purchase_price) as 'purchase_total'"),$condition,$duration,$coloumn='created_at');
-  $stockPriceReamaning =  $this->Reports_model->data_between_date('table_purchase',array("MONTHNAME(created_at) as month","sum(purchase_price*quantity_for_sale) as 'stock reamaning'"),$condition,$duration,$coloumn='created_at');
-  print_r($stockPriceReamaning);
-  // $this->output->enable_profiler(TRUE);
-   // $profit= $sumSales-$sumPurchase + $stockPriceReamaning[0]['sum'];
-// echo $stockPriceReamaning ;
-// echo '<br>';
-  print_r($sumPurchase);
-  print_r($sumSales);
- // if ($_SERVER['REQUEST_METHOD'] == 'POST' ) {
- //   $date_range = explode(' - ',$this->input->post('date_range'));
- //    $start_date = date_change_db($date_range[0]);
- //    $end_date = date_change_db($date_range[1]);
+$sales_sum=$this->Reports_model->report('table_sales',array("sum(total) as 'sell_total'"),$condition,$start_date,$end_date,'',$coloumn='created_at');
+$data['sales_sum']=$sales_sum[0]['sell_total'];
+  // print_r($data['sumSales']);die;
+  $purchase_sum=$this->Reports_model->report('table_purchase',array("sum(total_purchase_price) as 'purchase_price'","sum(quantity_for_sale*purchase_price) as stock_remain"),$condition,$start_date,$end_date,'',$coloumn='created_at');
+  $data['purchase_sum']=$purchase_sum[0]['purchase_price'];
+  $stockReaminingPrice=$purchase_sum[0]['stock_remain'];
+           $data['profit']=$data['sales_sum']-$data['purchase_sum']+$stockReaminingPrice;
+  // print_r($data['purchase_sum']);die;
+// report($table_name,$display_contents,$condition,$start_date='',$end_date='',$status='',$coloumn='created_at')
+                                              }
+$data['_view'] = 'profitgraph';
+  $this->load->view('index.php',$data);
+
 }
-
-
 
 
 function sales_analysis()

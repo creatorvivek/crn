@@ -63,7 +63,7 @@ input:-webkit-autofill + label {
   <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
     <div class="card">
       <div class="header" align="center">
-        <h2><?php echo isset($heading)?$heading:'ADD FOR SALE' ?></h2>
+        <h2><?php echo isset($heading)?$heading:'SALE SERVICE' ?></h2>
         
       </div>
       <div class="body">
@@ -273,7 +273,7 @@ input:-webkit-autofill + label {
       </div>
       <div class="modal-body">
 
-        <form class="form-horizontal" id="payForm" action="<?= base_url() ?>crn/add_crn_process?redirect=1" method="POST">
+        <form class="form-horizontal" id="payForm" action="<?= base_url() ?>crn/add_crn_process?redirect_service=1" method="POST">
          <input type="hidden" name="<?= $this->security->get_csrf_token_name();?>" value="<?= $this->security->get_csrf_hash();?>">
          <div class="row">
           <div class="col-md-12">
@@ -494,7 +494,7 @@ function test_two(id)
 $.ajax({
   type: "post",
   url: "<?= base_url() ?>service/fetch_service",
-  data:{item_id:item_id,<?= $this->security->get_csrf_token_name();?>:"<?= $this->security->get_csrf_hash();?>"},
+  data:{service_id:item_id,<?= $this->security->get_csrf_token_name();?>:"<?= $this->security->get_csrf_hash();?>"},
   success: function (data) {
     var obj=JSON.parse(data);
     console.log(obj);

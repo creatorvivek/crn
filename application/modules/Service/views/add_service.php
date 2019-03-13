@@ -17,7 +17,7 @@
                                  <div class="form-group form-float">
                                 <div class="form-line">
                                   <textarea class="form-control" name="discription" required></textarea>
-                                  <label class="form-label">Discription</label>
+                                  <label class="form-label">Description</label>
                                 </div>
                               </div>
                                 <div class="form-group form-float">

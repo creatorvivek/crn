@@ -18,7 +18,7 @@
     <link href="<?= base_url() ?>assets/admin/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Waves Effect Css -->
-    <link href="<?= base_url() ?>assets/admin/plugins/node-waves/waves.css" rel="stylesheet" />
+    <link href="<?= base_url() ?>assets/admin/plugins/node-waves/waves.min.css" rel="stylesheet" />
 
     <!-- Animation Css -->
   
@@ -36,11 +36,11 @@
     <script src="<?= base_url() ?>/assets/admin/plugins/jquery/jquery.min.js"></script>
     <link href="<?= base_url() ?>assets/admin/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">
 
-    <link href="<?= base_url() ?>assets/admin/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <link href="<?= base_url() ?>assets/admin/plugins/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" />
 
-    <link href="<?= base_url() ?>assets/admin/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
+    <!-- <link href="<?= base_url() ?>assets/admin/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" /> -->
     <!-- Bootstrap Material Datetime Picker Css -->
-    <link href="<?= base_url() ?>assets/admin/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+    <!-- <link href="<?= base_url() ?>assets/admin/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" /> -->
     <link rel="stylesheet" href="<?= base_url() ?>assets/admin/plugins/daterangepicker/daterangepicker-bs3.css">
     
 
@@ -262,6 +262,8 @@ function IdleTimeout() {
                         <span><?= strtoupper(isset($this->session->menu_dashboard) ? $this->session->menu_dashboard : 'DASHBOARD') ?></span>
                     </a>
                 </li>
+
+                  <?php if($this->session->type==2 ||  $this->session->type==3) {  ?>   
                 <li class="<?php if ($this->uri->segment(1) == 'item') {
                     echo 'active';
                 } ?>">
@@ -305,6 +307,7 @@ function IdleTimeout() {
            
 </ul>
 </li>
+<?php } ?>
  <li class="<?php if ($this->uri->segment(1) == 'sales') {
                     echo 'active';
                 } ?>">
@@ -338,8 +341,19 @@ function IdleTimeout() {
         </li>
 
 
-<?php }    ?>
+ <?php }   
 
+    if($this->session->type==1)
+{ ?>
+<li class="<?php if ($this->uri->segment(2) == 'sale_service') {
+                echo 'active';
+            } ?>">
+            <a href="<?= base_url() ?>sales/sale_service">
+                <i class="material-icons">layers</i>
+                <span>SALE SERVICE </span>
+            </a>
+        </li>
+     <?php }   ?>
         <li class="<?php if ($this->uri->segment(2) == 'sales_list') {
             echo 'active';
         } ?>">
@@ -362,6 +376,14 @@ function IdleTimeout() {
     <a href="<?= base_url() ?>sales/payment_list">
         <i class="material-icons">layers</i>
         <span>PAYMENT LIST</span>
+    </a>
+</li>
+<li class="<?php if ($this->uri->segment(2) == 'invoice_list') {
+        echo 'active';
+    } ?>">
+    <a href="<?= base_url() ?>sales/invoice_list">
+        <i class="material-icons">layers</i>
+        <span>INVOICE LIST</span>
     </a>
 </li>
 </ul>
@@ -398,7 +420,7 @@ function IdleTimeout() {
                     </ul>
                 </li>
             <?php } ?>
-<li class="<?php if ($this->uri->segment(1) == 'crn') {
+<!-- <li class="<?php if ($this->uri->segment(1) == 'crn') {
     echo 'active';
 } ?>">
 <a href="javascript:void(0);" class="menu-toggle">
@@ -415,17 +437,17 @@ function IdleTimeout() {
         <i class="material-icons">layers</i>
         <span>ADD <?= strtoupper(isset($this->session->menu_customer) ? $this->session->menu_customer : 'CUSTOMER') ?></span>
     </a>
-</li>
-<li class="<?php if ($this->uri->segment(2) == 'customer_list') {
+</li> -->
+<li class="<?php if ($this->uri->segment(1) == 'crn') {
     echo 'active';
 } ?>">
 <a href="<?= base_url() ?>crn/customer_list">
     <i class="material-icons">layers</i>
-    <span>LIST <?= strtoupper(isset($this->session->menu_customer) ? $this->session->menu_customer : 'CUSTOMER') ?></span>
+    <span> <?= strtoupper(isset($this->session->menu_customer) ? $this->session->menu_customer : 'CUSTOMER') ?></span>
 </a>
 </li>
-</ul>
-</li>
+<!-- </ul>
+</li> -->
 <li class="<?php if ($this->uri->segment(1) == 'staff') {
     echo 'active';
 } ?>">
@@ -450,7 +472,7 @@ function IdleTimeout() {
 
 </ul>
 </li>
-<li class="<?php if ($this->uri->segment(1) == 'account') {
+<!-- <li class="<?php if ($this->uri->segment(1) == 'account') {
     echo 'active';
 } ?>">
 <a href="javascript:void(0);" class="menu-toggle">
@@ -460,25 +482,17 @@ function IdleTimeout() {
 
 <ul class="ml-menu">
 
-                            <!--  <li class="<?php if ($this->uri->segment(2) == 'add_invoice') {
-                                                echo 'active';
-                                            } ?>">
-                                        <a href="<?= base_url() ?>account/add_invoice">Generate Invoice</a>
-                                    </li> -->
+                          
                                     <li class="<?php if ($this->uri->segment(2) == 'invoice_list') {
                                         echo 'active';
                                     } ?>">
                                     <a href="<?= base_url() ?>account/invoice_list"><span>Invoice List</span></a>
                                 </li>
-                             <!-- <li class="<?php if ($this->uri->segment(2) == 'ledger_report') {
-                                                echo 'active';
-                                            } ?>">
-                                        <a href="<?= base_url() ?>account/ledger_report">Ledger Report</a>
-                                    </li> -->
-
+                            
 
                                 </ul>
-                            </li>
+                            </li> -->
+                             <?php if($this->session->type==2 ||  $this->session->type==3) {  ?>  
                             <li class="<?php if ($this->uri->segment(1) == 'category') {
                                 echo 'active';
                             } ?>">
@@ -505,45 +519,25 @@ function IdleTimeout() {
                             </li>
                         </ul>
                     </li>
-
+                <?php } ?>
                      <li>
                                 <a href="<?= base_url() ?>vendor/vendor_list">
                                     <i class="material-icons">layers</i>
-                                    <span>VENDOR LIST</span>
+                                    <span>VENDOR</span>
                                 </a>
                             </li>
-                    <!--  <li class="<?php if ($this->uri->segment(1) == 'vendor') {
-                                echo 'active';
-                            } ?>">
-                            <a href="javascript:void(0);" class="menu-toggle">
-                                <i class="material-icons">widgets</i>
-                                <span>VENDOR</span>
-                            </a>
-
-                            <ul class="ml-menu">
-
-                                <li class="<?php if ($this->uri->segment(3) == 'add_category') {
-                                    echo 'active';
-                                } ?>">
-                                <a href="<?= base_url() ?>category/add_category">
-                                    <i class="material-icons">layers</i>
-                                    <span>ADD CATEGORY</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="<?= base_url() ?>category/category_list">
-                                    <i class="material-icons">layers</i>
-                                    <span>CATEGORY LIST</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li> -->
+                  
             <li class="<?php if ($this->uri->segment(1) == 'ticket') {
                 echo 'active';
             } ?>">
             <a href="javascript:void(0);" class="menu-toggle">
                 <i class="material-icons">widgets</i>
-                <span><?= strtoupper(isset($this->session->menu_ticket) ? $this->session->menu_ticket : 'TICKET') ?></span>
+                <span><?= strtoupper(isset($this->session->menu_ticket) ? $this->session->menu_ticket : 'TICKET') ?>   (<?php 
+                $this->db->where(array('f_id'=>$this->session->f_id,'status'=>'open'));
+                $count=$this->db->get('ticket')->num_rows(); 
+                echo $count;
+                ?>)
+            </span>
             </a>
             <ul class="ml-menu">
                 <li class="<?php if ($this->uri->segment(2) == 'add_ticket') {
@@ -553,7 +547,7 @@ function IdleTimeout() {
                     <i class="material-icons">layers</i>
                     <span><?= strtoupper(isset($this->session->menu_add_ticket) ? $this->session->menu_add_ticket : 'ADD TICKET') ?></span>
                 </a>
-            </li>
+                 </li>
             <li>
                 <a href="<?= base_url() ?>ticket/ticket_list">
                     <i class="material-icons">layers</i>
@@ -565,7 +559,7 @@ function IdleTimeout() {
             } ?>">
             <a href="<?= base_url() ?>ticket/ticket_list/open">
                 <i class="material-icons">layers</i>
-                <span>OPEN <?= strtoupper(isset($this->session->menu_ticket) ? $this->session->menu_ticket : 'TICKET') ?></span>
+                <span>OPEN <?= strtoupper(isset($this->session->menu_ticket) ? $this->session->menu_ticket : 'TICKET') ?>  (<?= $count ?> )</span>
             </a>
         </li>
         <li class="<?php if ($this->uri->segment(3) == 'close') {

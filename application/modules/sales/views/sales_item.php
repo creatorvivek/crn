@@ -109,6 +109,8 @@
             </div>
 
              <!-- Jquery DataTable Plugin Js -->
+      <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/jquery.dataTables.js"></script>
+    <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
    
      <script src="<?= base_url() ;?>assets/admin/plugins/daterangepicker/moment.js"></script>
      <script src="<?= base_url() ;?>assets/admin/plugins/daterangepicker/daterangepicker.js"></script>

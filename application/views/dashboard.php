@@ -16,6 +16,7 @@
 
             <!-- Widgets -->
             <div class="row clearfix">
+                <?php if($this->session->type==2 || $this->session->type==3) { ?>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                             <a href="<?=  base_url() ?>item/purchase_list" class="underline" data-toogle="tooltip" title="click to view">
                     <div class="info-box bg-pink hover-expand-effect">
@@ -24,7 +25,7 @@
                         </div>
                         <div class="content">
                             <div class="text">TOTAL STOCK </div>
-                            <div class="number count-to total_stock" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20"></div>
+                            <div class="number count-to total_stock" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20"><small div class="total_stock_quantity"></small></div>
                         </div>
                     </div>
                             </a>
@@ -40,6 +41,7 @@
                         </div>
                     </div>
                 </div>
+            <?php } ?>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                      <a href="<?=  base_url() ?>sales/sales_list" class="underline" data-toogle="tooltip" title="click to view">
                     <div class="info-box bg-pink hover-expand-effect">
@@ -150,7 +152,7 @@
                                 </a>
                                 </li>
                                 <li>
-                                    <a href="<?= base_url() ?>account/invoice_list" class="underline" data-toogle="tooltip" title="click to view">
+                                    <a href="<?= base_url() ?>sales/invoice_list" class="underline" data-toogle="tooltip" title="click to view">
                                     TOTAL INVOICE
                                     <span class="pull-right">
                                         <b class="total_invoice"></b>
@@ -670,8 +672,8 @@
                 <!-- #END# Browser Usage -->
             
              <!-- Chart Plugins Js -->
-    <script src="<?= base_url() ?>assets/admin/plugins/chartjs/Chart.bundle.js"></script>
-    <script src="<?= base_url() ?>/assets/admin/plugins/jquery-countto/jquery.countTo.js"></script>
+    <script src="<?= base_url() ?>assets/admin/plugins/chartjs/Chart.bundle.min.js"></script>
+    <script src="<?= base_url() ?>/assets/admin/plugins/jquery-countto/jquery.countTo.min.js"></script>
 
    
     <script type="text/javascript">
@@ -699,9 +701,10 @@ success: function (data) {
 var obj=JSON.parse(data);
 // console.log(obj.total_stock);
 $('.total_stock').html(obj.total_stock);
-$('.sell_stock').html(obj.sell_stock);
+$('.total_stock_quantity').html(obj.total_qty);
+// $('.sell_stock').html(obj.sell_stock);
 $('.total_stock_amount').html(obj.total_stock_amount.toLocaleString('en-IN'));
-$('.this_month_stock_sell').html(obj.this_month_stock_sell);
+// $('.this_month_stock_sell').html(obj.this_month_stock_sell);
 },
 });
 }
@@ -718,7 +721,7 @@ var obj=JSON.parse(data);
 // console.log(obj);
 $('.total_stock_amount').html(obj.total_stock_amount);
 $('.total_invoice').html(obj.total_invoices);
-$('.today_invoice').html(obj.today_invoices);
+// $('.today_invoice').html(obj.today_invoices);
 // $('.total_profit').html(obj.total_profit);
 // $('.total_profit').html(obj.total_profit);
 // $('.total_profit').html(obj.total_profit);

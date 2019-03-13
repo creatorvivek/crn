@@ -246,7 +246,7 @@ return $data;
 
 
 ## fetch data between two dates(special we can given time intervel )
-function data_between_date($table_name,$display_contents,$condition,$interval_unit,$table_row='created_at',$start_date='',$end_date='')
+function data_between_date($table_name,$display_contents,$condition,$interval_unit,$table_row='created_at',$group_by='',$order_by='')
 {
 
 
@@ -257,7 +257,10 @@ function data_between_date($table_name,$display_contents,$condition,$interval_un
  $this->db->where($condition);
  // if(!empty($start_date) && !empty($end_date))
   $this->db->where(" DATE(".$table_row.") BETWEEN DATE_SUB( CURDATE( ),".$interval_unit." ) AND CURDATE( )");
-
+  if($group_by)
+     $this->db->group_by(''.$group_by.'(created_at)');
+   if($order_by)
+    $this->db->order_by(''.$order_by.'(created_at)','asc');
 $data=$this->db->get()->result_array();
 
 

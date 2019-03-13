@@ -44,8 +44,12 @@
                                             	<td><?= $row['c_mobile'] ?></td>
                                             	<td data-toggle="tooltip" title="click to send email"><a href="mailto:<?= $row['c_email'] ?>"><?= $row['c_email'] ?></a></td>
                                             	<td><?= $row['created_at'] ?></td>
-                                         	<td><a href="<?= base_url() ?>quotation/quotation_print/<?=  $row['id']  ?>" class="btn btn-info">print</a></td>
-
+                                                 <td>
+                                                    <div class="btn-group" role="group">
+                                         	<a href="<?= base_url() ?>quotation/quotation_print/<?=  $row['id']  ?>" class="btn btn-info" target="_blank" data-toggle="tooltip" title="print"><i class="material-icons">print</i></a>
+                                            <!-- <a href="<?= base_url() ?>quotation/quotation_print/<?=  $row['id']  ?>" class="btn btn-success" data-toggle="tooltip" title="order"><i class="material-icons">shopping_cart</i></a> -->
+                                        </div>
+                                    </td>
                                            
                                            
                                            

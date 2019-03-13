@@ -10,20 +10,23 @@
                                  <input type="hidden" name="<?= $this->security->get_csrf_token_name();?>" value="<?= $this->security->get_csrf_hash();?>">
                                 <div class="form-group form-float">
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="name" required="" aria-required="true" >
+                                        <input type="text" class="form-control" name="name" value="<?= $this->input->post('name'); ?>" required="" aria-required="true" >
                                         <label class="form-label">Name</label>
+                                        <span class="text-danger"><?= form_error('name');?></span>
                                     </div>
                                 </div>
                                 <div class="form-group form-float">
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="mobile" required="" aria-required="true" onkeypress="return isNumberKey(event)" maxlength="10">
+                                        <input type="text" class="form-control" name="mobile" required=""  value="<?= $this->input->post('mobile'); ?>" aria-required="true" onkeypress="return isNumberKey(event)" maxlength="10">
                                         <label class="form-label">Mobile</label>
+                                        <span class="text-danger"><?= form_error('mobile');?></span>
                                     </div>
                                 </div>
                                 <div class="form-group form-float">
                                     <div class="form-line">
-                                        <input type="email" class="form-control" name="email" required="" aria-required="true">
+                                        <input type="email" class="form-control" name="email" required="" value="<?= $this->input->post('email'); ?>" aria-required="true">
                                         <label class="form-label">Email</label>
+                                        <span class="text-danger"><?= form_error('email');?></span>
                                     </div>
                                 </div>
                                 <div class="form-group">

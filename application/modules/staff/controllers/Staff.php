@@ -67,7 +67,17 @@ function add()
   // $username = $this->input->post('username');
   // $password = $this->input->post('password');
   // $encrtyted_password=md5($password);
+ $this->load->library('form_validation');
+  
+  $this->form_validation->set_rules('name','Name','required|trim|alpha_numeric_spaces');
 
+  $this->form_validation->set_rules('email','Email','required|valid_email|trim');
+  $this->form_validation->set_rules('gender','Gender','required');
+  
+
+  $this->form_validation->set_rules('mobile','Mobile number','required|max_length[10]|numeric');
+  if($this->form_validation->run() )     
+  {  
   $f_id=$this->session->f_id;
 // if()
   // print_r($f_id);die;
@@ -153,7 +163,16 @@ $addStaff=$this->Staff_model->insert('table_staff',$params);
     );
     redirect('staff/staff_list');
 
+}
+else
+{
+   $heading=strtoupper(isset($this->session->menu_staff)?$this->session->menu_staff:'STAFF' );
+   $data['heading']=$heading;
+  $data['title']='ADD '. $heading;
+   $data['_view'] = 'add_staff';
 
+  $this->load->view('index.php',$data);
+}
 
 
 }

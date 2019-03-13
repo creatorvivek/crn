@@ -114,9 +114,12 @@
 </div>
 <!-- /.col -->
 </div>
+  <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/jquery.dataTables.js"></script>
+    <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+
 <script type="text/javascript">
   $(document).ready( function () {
-    $('#ticket_table').DataTable(
+    $('.js-basic-example').DataTable(
     {
       "processing": true
     });

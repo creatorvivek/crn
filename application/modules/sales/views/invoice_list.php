@@ -1,7 +1,7 @@
 <div class="row clearfix">
   <div class="col-md-12">
     <div class="card">
-        <form action="<?= base_url() ?>sales/invoice_list" method="post">
+        <form action="<?= base_url() ?>account/invoice_list" method="post">
           <input type="hidden" name="<?= $this->security->get_csrf_token_name();?>" value="<?= $this->security->get_csrf_hash();?>">
       <div class="body">
         <div class="row clearfix">
@@ -52,7 +52,7 @@
                         </div>
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                <table class="table table-bordered table-striped table-hover js-basic-example dataTable" id="invoiceTable">
     <thead>
     <tr>
         <!-- <th>ID</th> -->
@@ -147,10 +147,12 @@
 
  <script src="<?= base_url() ;?>assets/admin/plugins/daterangepicker/moment.js"></script>
      <script src="<?= base_url() ;?>assets/admin/plugins/daterangepicker/daterangepicker.js"></script>
+      <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/jquery.dataTables.js"></script>
+    <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
     
 <script>
     $(document).ready( function () {
-        $('#invoice_table').DataTable();
+        $('.js-basic-example').DataTable();
     } );
      $('#daterange').daterangepicker(
     {

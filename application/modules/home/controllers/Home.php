@@ -166,7 +166,7 @@ function stock_count()
     $data['total_stock_amount']=$this->Home_model->sum_column('table_purchase',$totalStockParam,'total_purchase_price');
  
     $condition=array('f_id'=>$f_id);
-    $data['this_month_stock_sell']=$this->Home_model->data_current_count('table_item',array('*'),$sellStockParam,"'%y-%m-01'");
+    // $data['this_month_stock_sell']=$this->Home_model->data_current_count('table_item',array('*'),$sellStockParam,"'%y-%m-01'");
    echo json_encode($data);
 }
 function account_dashboard()

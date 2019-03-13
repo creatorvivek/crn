@@ -88,9 +88,17 @@ function add_crn_process()
       'title'=> 'succesfully add'
 
     );
-    if($this->input->get('redirect'))
+    if($this->input->get('redirect_sale'))
     {
       redirect('sales/sale_add');
+    }
+    else if($this->input->get('redirect_sale_service'))
+    {
+      redirect('sales/sale_service_add');
+    }
+    else if($this->input->get('redirect_service'))
+    {
+         redirect('sales/sale_service');
     }
     else
      { 

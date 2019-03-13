@@ -14,7 +14,8 @@ function select_item($table_name,$condition,$content_display)
 
     $this->db->select($content_display);
     $this->db->from($this->$table_name);
-    if(!is_null($condition))
+     $this->db->order_by("DATE(purchase_item.created_at)", "inc");
+      if(!is_null($condition))
       $this->db->where($condition);
   	$this->db->join($this->table_purchase,''.$this->table_purchase.'.item_id='.$this->$table_name.'.id');
     $data= $this->db->get()->result_array();

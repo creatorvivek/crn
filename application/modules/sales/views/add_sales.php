@@ -55,6 +55,10 @@ th
 {
   font-size:12px;
 }
+#details
+{
+  font-size: 12px;
+}
 
 input:-webkit-autofill + label {
   // Insert your active label styles
@@ -137,7 +141,7 @@ input:-webkit-autofill + label {
                 <?php  foreach($items as $row)
                 {
                   ?>
-                  <option value="<?= $row['id'] ?>" ><?= $row['item_name'] ?></option>
+                  <option value="<?= $row['id'] ?>" ><?= $row['item_name'] .'  (Rs.   '. $row['selling_price'] .' )' ?></option>
                 <?php } ?>
               </select>
             </div>
@@ -281,7 +285,7 @@ input:-webkit-autofill + label {
       </div>
       <div class="modal-body">
 
-        <form class="form-horizontal" id="payForm" action="<?= base_url() ?>crn/add_crn_process?redirect=1" method="POST">
+        <form class="form-horizontal" id="payForm" action="<?= base_url() ?>crn/add_crn_process?redirect_sale=1" method="POST">
          <input type="hidden" name="<?= $this->security->get_csrf_token_name();?>" value="<?= $this->security->get_csrf_hash();?>">
          <div class="row">
           <div class="col-md-12">

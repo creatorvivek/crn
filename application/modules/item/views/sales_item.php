@@ -66,8 +66,9 @@
             </div>
 
              <!-- Jquery DataTable Plugin Js -->
-   
-     <!-- <script src="<?= base_url() ?>assets/admin/js/pages/tables/jquery-datatable.js"></script> -->
+     <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/jquery.dataTables.js"></script>
+    <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+ 
      <script type="text/javascript">
       $(document).ready( function () {
     $('.sales_table').DataTable({

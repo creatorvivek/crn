@@ -47,13 +47,12 @@ class Sales extends MY_Controller
     if (!$order_no) {
       $order_no = 1;
     }
- // print_r($order_no);die;
+
     $itemCount = count($item_id);
- // echo $itemCount;
+
     $date = date('Y-m-d H:i:s');
 
-    // $params['item_id']=$item_id[$i];
-    // $params['item_amount']=$amount[$i];
+   
     $params = array('customer_name' => $customer_name, 'customer_id' => $customer_id, 'mobile' => $mobile, 'email' => $email, 'f_id' => $f_id, 'created_by' => $staff_id, 'created_at' => $date, 'total' => $total, 'order_id' => $order_no);
  // print_r($params);die;
     $addSales = $this->Sales_model->insert('table_sales', $params);
@@ -176,8 +175,8 @@ class Sales extends MY_Controller
 
     $f_id = $this->session->f_id;
   // echo $f_id;die;
-    $params = array('f_id' => $f_id,'quantity>' => 0);
-    $item = $this->Sales_model->select('table_item', $params, array('id', 'item_name', 'description', 'selling_price', 'purchase_price', 'model_no', 'serial_no', 'created_by', 'created_at'));
+    $params = array('purchase_item.f_id' => $f_id,'purchase_item.quantity_for_sale>' => 0);
+    $item = $this->Sales_model->select_item('table_item', $params, array('purchase_item.id','item_name','item_list.description','purchase_price','selling_price'));
   // print_r($item);die;
     $data['items'] = $item;
     $data['_view'] = 'add_sales';
@@ -189,8 +188,9 @@ class Sales extends MY_Controller
 
     $f_id = $this->session->f_id;
     
-    $params = array('item_list.f_id' =>$f_id);
-    $item = $this->Sales_model->select_item('table_item',$params, array('purchase_item.id','item_name','item_list.description','purchase_price'));
+    $params = array('item_list.f_id' =>$f_id,'purchase_item.quantity_for_sale>'=>0);
+    $item = $this->Sales_model->select_item('table_item',$params, array('purchase_item.id','item_name','item_list.description','purchase_price','selling_price'));
+    // print_r($item);die;
     $condition=array('f_id'=>$f_id);
     $data['service']=$this->Sales_model->select('table_services',$condition,array('*'));
     
@@ -200,7 +200,7 @@ class Sales extends MY_Controller
   }
   function add_service()
   {
-    // print_r($this->input->post());die;
+    print_r($this->input->post());die;
       $f_id = $this->session->f_id;
     $staff_id = $this->session->staff_id;
     $customer_name = strip_tags($this->input->post('name', 1));
@@ -722,7 +722,208 @@ function test()
 }
 
 
+// function sales_order_by_quotation()
+// {
+  
 
+//   $f_id=$this->session->f_id;
+// $condition=array('f_id'=>$f_id,'id'=>$id);
+// $detailsCondition=array('f_id'=>$f_id,'quo_id'=>$id);
+// $quotation= $this->Quotation_model->select('table_quotation',$condition,array('*'));
+// $q_result=$quotation[0];
+// $quotation_details= $this->Quotation_model->select('table_quotation_details',$detailsCondition,array('*'));
+
+
+//  $orderParams = array('f_id' => $f_id);
+//     $order_no = $this->Sales_model->get_max_order_no('table_sales', $orderParams);
+//     if (!$order_no) {
+//       $order_no = 1;
+//     }
+
+//     $itemCount = count($item_id);
+
+//     $date = date('Y-m-d H:i:s');
+
+   
+//     $params = array('customer_name' => $q_result['c_name'], 'customer_id' => 43, 'mobile' => $q_result['c_mobile'], 'email' => $q_result['c_email'],, 'f_id' => $f_id, 'created_by' => $staff_id, 'created_at' => $date, 'total' => $q_result['grand_total'], 'order_id' => $order_no);
+//  // print_r($params);die;
+//     $addSales = $this->Sales_model->insert('table_sales', $params);
+// #update stock
+//     for ($i = 0; $i < count($item_id); $i++) { 
+//       # code...
+
+//       $condition = array('id' => $item_id[$i]);
+//       ##fetch item quantity 
+//       $quantity=$this->Sales_model->select('table_purchase',$condition,array('quantity_for_sale','purchase_price','item_id'));
+//       $reamaning_item=$quantity[0]['quantity_for_sale']-$qty[$i];
+//       $quantity_out=$quantity[0]['quantity_out'];
+//       ##update how much quantity out and how much reamaning for sales
+//       $quantity_out_update = $quantity[0]['quantity_out']+$qty[$i];
+//       $itemParams = array('quantity_for_sale' => $reamaning_item,'quantity_out'=>$quantity_out_update);
+//       $this->Sales_model->update_col('table_purchase', $condition, $itemParams);
+
+//     ##inserts sale details
+//       $saleDetailsParam = array(
+//         'particular' => $item_id[$i],
+//         'price' => $amount[$i],
+//         'f_id' => $f_id,
+//         'quantity'=>$qty[$i],
+//         'order_no' => $order_no,
+//         'created_at' =>$date,
+//         'discount_percent'=>$discount[$i]
+//       );
+//       $addSalesDetails = $this->Sales_model->insert('table_sales_details', $saleDetailsParam);
+
+//       ##for profit loss graph
+
+//       $profitLossParam=array(
+//         'item_purchase_id'=>$item_id[$i],
+//         'item_id'=>$quantity[0]['item_id'],
+//         'purchase_price'=>$quantity[0]['purchase_price'],
+//         'selling_price'=>round($amount[$i]/$qty[$i]),
+//         'qty'=>$qty[$i],
+//         'created_at'=>$date,
+//         'f_id'=>$f_id
+
+
+//       );
+//        $addGraphDetails = $this->Sales_model->insert('table_item_graph',$profitLossParam);
+//       /*end profit loss graph*/
+
+//     }
+//     $particularParam = array(
+//       'particular' => $quotation_details,
+//       'price' => $amount,
+//       'quantity'=>$qty,
+//       'unit'=>$unit
+//     );
+//     // print_r($particularParam);die;
+//     $invoiceParams = array(
+//       'customer_name' => $customer_name, 'mobile' => $mobile, 'email' => $email, 'f_id' => $f_id, 'created_by' => $staff_id, 'created_at' => $date, 'order_id' => $order_no, 'customer_id' => $customer_id,'c_city'=>$city,'c_pincode'=>$pincode,'address'=>$address
+
+//     );
+//     $invoice_id = modules::run('account/account/invoice', $invoiceParams, $particularParam);
+//   ## paid amount
+//     $paid_amount= $this->input->post('paid_amount');
+//     if ($paid_amount > 0) 
+//     {
+//         ##generate Payment id
+//       $payment_id= modules::run('account/account/get_payment_id');
+//       $paidParams = array
+//       (
+//         'f_id' => $f_id,
+//         'payment_id'=>$payment_id,
+//         'invoice_id' => $invoice_id,
+//         'staff_id' => $staff_id,
+//         'customer_id' => $customer_id,
+//         'payment_method' => $method,
+//         'amount' => $paid_amount,
+//         'order_reference' => $order_no,
+//         'payment_date' => date('Y-m-d H-i-s')
+
+
+//       );
+
+//       $payment_reference_id=$this->Sales_model->insert('table_payment_details', $paidParams);
+//       $invoiceCondition=array(
+//         'invoice_id'=>$invoice_id,
+//         'f_id'=>$f_id
+//       );
+//       $invoicePaidParams=array(
+//         'paid'=>$paid_amount
+//       );
+//       $this->Sales_model->update_col('table_invoices',$invoiceCondition,$invoicePaidParams); 
+//       $this->load->model('Account/Account_model');
+//       $this->Account_model->maintain_status_invoice($paid_amount,$f_id,$invoice_id);
+//       $accountTransaction=array(
+//         'reference_id'=>$payment_reference_id,
+//         'reference_type'=>2,
+//         'credit'=>$paid_amount,
+//         'f_id'=>$f_id,
+//         'reciept_id'=>$payment_id,
+//         'customer_id'=>$customer_id,
+//                   // 'caf_id'=>$params[0]['id'],
+//         'created_at'=>date('Y-m-d H-i-s')
+
+//       );
+//       $this->Account_model->insert('table_account_transaction',$accountTransaction);
+
+//     }
+
+//     $this->session->alerts = array(
+//       'severity' => 'success',
+//       'title' => 'successfully added'
+//     );
+//     redirect('sales/sales_list');
+
+
+
+function invoice_list()
+{
+  $f_id=$this->session->f_id;
+  if($this->input->get('status')=='pending')
+  {
+    $invoiceParam=array(
+    'f_id'=>$f_id,
+    'status!='=>'paid'
+       );  
+    $invoice_list=$this->Sales_model->select('table_invoices',$invoiceParam,array('id','name','mobile','email','amount','paid','status','invoice_id','created_at','total','customer_id'));
+  }
+ 
+else if($_SERVER['REQUEST_METHOD'] == 'POST' )
+  {
+     $this->load->helper('user_helper');
+    $date_range = explode(' - ',$this->input->post('date_range'));
+    $start_date = date_change_db($date_range[0]);
+
+
+    $end_date = date_change_db($date_range[1]);
+    // }
+  
+    $condition=array(
+   
+      'f_id'=>$f_id,
+     
+    );
+  // var_dump($ledgerParam);
+  // die;
+    $invoice_list= $this->Sales_model->report('table_invoices',array('*'),$condition,$start_date,$end_date,$status='');
+
+  }
+  else
+  {
+  $invoiceParam=array(
+    'f_id'=>$f_id
+
+  );
+ $invoice_list=$this->Sales_model->select('table_invoices',$invoiceParam,array('id','name','mobile','email','amount','paid','status','invoice_id','created_at','total','customer_id'));
+
+  }
+  
+    $data['invoice']=$invoice_list;
+    $data['heading']='INVOICE LIST';
+  $data['_view'] = 'invoice_list';
+
+  $this->load->view('index.php',$data);
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// }
 
 
 

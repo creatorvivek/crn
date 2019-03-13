@@ -43,16 +43,16 @@ $(document).ready(function(){
    
 
     <!-- Bootstrap Core Js -->
-    <script src="<?= base_url() ?>/assets/admin/plugins/bootstrap/js/bootstrap.js"></script>
+    <script src="<?= base_url() ?>assets/admin/plugins/bootstrap/js/bootstrap.min.js"></script>
 
     <!-- Select Plugin Js -->
-    <script src="<?= base_url() ?>/assets/admin/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+    <script src="<?= base_url() ?>assets/admin/plugins/bootstrap-select/js/bootstrap-select.min.js"></script>
 
     <!-- Slimscroll Plugin Js -->
-    <script src="<?= base_url() ?>/assets/admin/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <!-- <script src="<?= base_url() ?>/assets/admin/plugins/jquery-slimscroll/jquery.slimscroll.js"></script> -->
 
     <!-- Waves Effect Plugin Js -->
-    <script src="<?= base_url() ?>/assets/admin/plugins/node-waves/waves.js"></script>
+    <script src="<?= base_url() ?>assets/admin/plugins/node-waves/waves.min.js"></script>
 
     <!-- Jquery CountTo Plugin Js -->
     
@@ -60,17 +60,17 @@ $(document).ready(function(){
 
 
     <!-- Custom Js -->
-    <script src="<?= base_url() ?>/assets/admin/js/admin.js"></script>
+    <script src="<?= base_url() ?>assets/admin/js/admin.js"></script>
     <!-- <script src="<?= base_url() ?>/assets/admin/js/pages/index.js"></script> -->
 
     <!-- Demo Js -->
-    <script src="<?= base_url() ?>/assets/admin/js/demo.js"></script>
+    <!-- <script src="<?= base_url() ?>/assets/admin/js/demo.js"></script> -->
     
-      <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/jquery.dataTables.js"></script>
+    <!--   <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/jquery.dataTables.js"></script>
     <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-    <script src="<?= base_url() ?>assets/admin/js/pages/tables/jquery-datatable.js"></script>
-      <script src="<?= base_url() ?>/assets/jquery-ui.js"></script>
-           <script src="<?= base_url() ?>assets/admin/plugins/momentjs/moment.js"></script>
+    <script src="<?= base_url() ?>assets/admin/js/pages/tables/jquery-datatable.js"></script> -->
+      <script src="<?= base_url() ?>assets/jquery-ui.js"></script>
+           <!-- <script src="<?= base_url() ?>assets/admin/plugins/momentjs/moment.js"></script> -->
       <!-- <script src="<?= base_url() ?>assets/admin/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script> -->
           <!-- <script src="<?= base_url() ?>assets/admin/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script> -->
            

@@ -156,8 +156,8 @@ $data['quotation']=$quotation[0];
 $data['quotation_details']= $this->Quotation_model->select('table_quotation_details',$detailsCondition,array('*'));
 // echo '<pre>';
 // print_r($data['quotation']);
-// print_r($data['quotation_details']);
-$this->load->view('print_quotation',$data);
+print_r($data['quotation_details']);
+// $this->load->view('print_quotation',$data);
 
 }
 

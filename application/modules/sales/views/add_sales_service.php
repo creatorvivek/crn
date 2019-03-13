@@ -55,7 +55,10 @@ th
 {
   font-size:12px;
 }
-
+#details
+{
+  font-size: 12px;
+}
 input:-webkit-autofill + label {
   // Insert your active label styles
 }
@@ -80,7 +83,7 @@ input:-webkit-autofill + label {
             <div class="form-line">
               <input type="text" class="form-control search"  aria-required="true" onkeypress="search()" >
               <label class="form-label">Search Customer by name and Mobile Number</label>
-       <spna style="color:red" id="error_customer"></spna>
+              <spna style="color:red" id="error_customer"></spna>
             </div>
           </div>
           <ul id="show_search_result" class="dropdown-menu customtable"></ul>
@@ -137,13 +140,13 @@ input:-webkit-autofill + label {
                 <?php  foreach($items as $row)
                 {
                   ?>
-                  <option value="<?= $row['id'] ?>" data-toggle="tooltip" title="sss"><?= $row['item_name'] .'     '. $row['description']          ?>    </option>
+                  <option value="<?= $row['id'] ?>" ><?= $row['item_name'] .'  (Rs.   '. $row['selling_price'] .' )'         ?>    </option>
                 <?php } ?>
               </select>
             </div>
             <span id="error_item" style="color:red"></span>
           </div>
-           <div class="col-md-6">
+          <div class="col-md-6">
             <div class="form-group">
               <select class="form-control show-tick service" name="item[]" id="service1"  onchange="service(1)">
                 <option value="">--select Service--</option>
@@ -154,7 +157,7 @@ input:-webkit-autofill + label {
                 <?php } ?>
               </select>
             </div>
-            <span id="error_item" style="color:red"></span>
+            <span id="error_service" style="color:red"></span>
           </div>
           <input type="hidden" class="customer_id" name="customer_id">
           <input type="hidden" class="email" name="email">
@@ -290,11 +293,11 @@ input:-webkit-autofill + label {
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">ADD NEW CUSTOMER</h4>
-       
+
       </div>
       <div class="modal-body">
 
-        <form class="form-horizontal" id="payForm" action="<?= base_url() ?>crn/add_crn_process?redirect=1" method="POST">
+        <form class="form-horizontal" id="payForm" action="<?= base_url() ?>crn/add_crn_process?redirect_sale_service=1" method="POST">
          <input type="hidden" name="<?= $this->security->get_csrf_token_name();?>" value="<?= $this->security->get_csrf_hash();?>">
          <div class="row">
           <div class="col-md-12">
@@ -494,7 +497,7 @@ function fill_detail(id,mobile,pincode,address,city,email,name)
 {
   // $('.name').val(name);
   // console.log(mobile);
-   $('#error_customer').hide();
+  $('#error_customer').hide();
   $('.search').val(''); 
   $('.customer_id').val(id);
   $('.mobile').val(mobile); 
@@ -525,21 +528,21 @@ function total()
 
 function test_two(id)
 {
- 
-   $('#error_item').hide();
-  var item_id=$('#item'+id).val();
-  if(item_id)
-  {
-    console.log(item_id);
 
-    $("#item1 option[value="+item_id+"]").prop('disabled',true);
-    $('.table_info').show();
+ $('#error_item').hide();
+ var item_id=$('#item'+id).val();
+ if(item_id)
+ {
+  console.log(item_id);
+
+  $("#item1 option[value="+item_id+"]").prop('disabled',true);
+  $('.table_info').show();
 // console.log(item_id);
 
 $.ajax({
   type: "post",
   url: "<?= base_url() ?>item/fetch_amount",
-  async: false,
+  // async: true,
   data:{item_id:item_id,<?= $this->security->get_csrf_token_name();?>:"<?= $this->security->get_csrf_hash();?>"},
   success: function (data) {
     var obj=JSON.parse(data);
@@ -558,18 +561,18 @@ var new_row = '<tr id="row'+count+'">'+
 '<td class="text-center"><button type="button" id="'+count+'" onclick="deleteRow('+count+')" class="btn btn-danger delete_item"><i class="material-icons">delete</i></button></td>'+
 '<input type="hidden" class="amount_hidden'+count+'" value="'+obj.selling_price +'" ><input type="hidden"  name="unit[]" value="'+obj.unit +'" ></tr>';
 
-                          $(new_row).insertAfter($('table tr.dynamicRows:last'));
-                          count++;
-         
-                total();
-                
-              },
-            });
+$(new_row).insertAfter($('table tr.dynamicRows:last'));
+count++;
+
+total();
+
+},
+});
 }
 }
 function service(id)
 {
- 
+
   var service_id=$('#service'+id).val();
   if(service_id)
   {
@@ -582,7 +585,7 @@ function service(id)
 $.ajax({
   type: "post",
   url: "<?= base_url() ?>service/fetch_service",
-     async: false,
+  // async: true,
   data:{service_id:service_id,<?= $this->security->get_csrf_token_name();?>:"<?= $this->security->get_csrf_hash();?>"},
   success: function (data) {
     // console.log(data);
@@ -592,24 +595,24 @@ $.ajax({
 // $('.amount'+id).val(obj.selling_price);
 
 var new_row_service = '<tr id="row'+count+'">'+
-  '<td class="text-center"><input type="hidden" name="item_name[]" value="'+obj.service_name +'">'+obj.service_name +'</td>'+
-  '<td class="text-center><input type="hidden" class="text-center" name="stock" readonly value="'+obj.validity +'">validity    (<small class="small_unit">'+obj.validity_unit+'  service </small>)</td>'+
-  '<td class="text-center">'+
-  '<input type="hidden" min=0   name="qty[]"   value="1"   ></td>'+
+'<td class="text-center"><input type="hidden" name="item_name[]" value="'+obj.service_name +'">'+obj.service_name +'</td>'+
+'<td class="text-center><input type="hidden" class="text-center" name="stock" readonly value="'+obj.validity +'">validity    (<small class="small_unit">'+obj.validity_unit+'  service </small>)</td>'+
+'<td class="text-center">'+
+'<input type="hidden" min=0   name="qty[]"   value="1"   ></td>'+
 
-  '<td class="text-center"><input type="text" class="form-control text-center discount'+count+'" name="discount[]" onkeyup="discount('+count+')" data-input-id="'+count+'" id="discount_id_'+count+'" max="100" min="0"></td>'+
-                          '<td class="text-center"><input class="form-control text-center amount amount_item'+count+'" type="text" amount-id = "'+count+'" id="amount_'+count+'" value="'+obj.amount+'" name="item_price[]" ></td><input type="hidden" name="service_id[]" class="item_id" value="'+obj.id+'">'+
-                          '<td class="text-center"><button type="button" id="'+count+'" onclick="deleteRow('+count+')" class="btn btn-danger delete_item"><i class="material-icons">delete</i></button></td>'+
-                          '<input type="hidden" class="amount_hidden'+count+'" value="'+obj.amount +'" ><input type="hidden"  name="unit[]" value="'+obj.validity_unit +'" ></tr>';
+'<td class="text-center"><input type="text" class="form-control text-center discount'+count+'" name="discount[]" onkeyup="discount('+count+')" data-input-id="'+count+'" id="discount_id_'+count+'" max="100" min="0"></td>'+
+'<td class="text-center"><input class="form-control text-center amount amount_item'+count+'" type="text" amount-id = "'+count+'" id="amount_'+count+'" value="'+obj.amount+'" name="item_price[]" ></td><input type="hidden" name="service_id[]" class="item_id" value="'+obj.id+'">'+
+'<td class="text-center"><button type="button" id="'+count+'" onclick="deleteRow('+count+')" class="btn btn-danger delete_item"><i class="material-icons">delete</i></button></td>'+
+'<input type="hidden" class="amount_hidden'+count+'" value="'+obj.amount +'" ><input type="hidden"  name="unit[]" value="'+obj.validity_unit +'" ></tr>';
                           // console.log(new_row_service);
                            // var new_rows='hhhhhhhhhh';
-                          $(new_row_service).insertAfter($('table tr.dynamicRows:last'));
-                          count++;
-         
-                total();
-                
-              },
-            });
+                           $(new_row_service).insertAfter($('table tr.dynamicRows:last'));
+                           count++;
+
+                           total();
+
+                         },
+                       });
 }
 }
 function total()
@@ -656,13 +659,13 @@ function total()
 function discount(id)
 {
   // var qty=1;
- var qty= $('.qty'+id).val();
- if(qty=='undefined' || qty==null || qty=='' )
- {
-  qty=1;
- }
+  var qty= $('.qty'+id).val();
+  if(qty=='undefined' || qty==null || qty=='' )
+  {
+    qty=1;
+  }
  // console.log(qty);
-  var discount= $('.discount'+id).val();
+ var discount= $('.discount'+id).val();
    // var amount= $('.amount_item'+id).val();
    var basic_amount= $('.amount_hidden'+id).val();
    // console.log('d'+discount);
@@ -722,26 +725,26 @@ function form_submit()
   else if(item_id=='' || item_id==null || item_id=='undefined' )
   {
     $('#error_customer').hide();
-     $('#error_item').show();
+    $('#error_item').show();
     $('#error_item').html("item selection required");
 
   }
   else if(paid>0 && !payment_method)
-{
-        
-          alert("please select payment method");
-        
-       }
+  {
 
-     
-     else
-     {
-     document.getElementById("form_validation").action ="<?= base_url() ?>sales/add_sales";
-     document.getElementById("form_validation").submit();
+    alert("please select payment method");
 
-     } 
-    
-  
+  }
+
+
+  else
+  {
+   document.getElementById("form_validation").action ="<?= base_url() ?>sales/add_sales";
+   document.getElementById("form_validation").submit();
+
+ } 
+
+
  
 
 

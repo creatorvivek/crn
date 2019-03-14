@@ -8,22 +8,22 @@
       <div class="body">
         <form id="form_validation" method="POST" novalidate="novalidate" action="<?= base_url() ?>item/edit_item/<?= $item[0]['id'] ?>">
             <input type="hidden" name="<?= $this->security->get_csrf_token_name();?>" value="<?= $this->security->get_csrf_hash();?>">
-          <div class="col-md-12">
+         <!--  <div class="col-md-12">
             <div class="form-group form-float">
               <div class="form-line">
                 <input type="text" class="form-control" name="name" required="" aria-required="true"  value="<?= ($this->input->post('name') ? $this->input->post('name') : $item[0]['item_name']); ?>" onkeypress="return isAlpha(event)">
                 <label class="form-label">Item Name</label>
               </div>
             </div>
-          </div>
-          <div class="col-md-12">
+          </div> -->
+          <!-- <div class="col-md-12">
             <div class="form-group form-float">
               <div class="form-line">
                 <textarea class="form-control" name="description" required><?= ($this->input->post('description') ? $this->input->post('description') : $item[0]['description']); ?></textarea>
                 <label class="form-label">Discription</label>
               </div>
             </div>
-          </div>
+          </div> -->
           <div class="col-md-6">
             <div class="form-group form-float">
               <div class="form-line">

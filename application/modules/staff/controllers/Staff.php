@@ -75,7 +75,7 @@ function add()
   $this->form_validation->set_rules('gender','Gender','required');
   
 
-  $this->form_validation->set_rules('mobile','Mobile number','required|max_length[10]|numeric');
+  $this->form_validation->set_rules('mobile','Mobile number','required|exact_length[10]|numeric');
   if($this->form_validation->run() )     
   {  
   $f_id=$this->session->f_id;

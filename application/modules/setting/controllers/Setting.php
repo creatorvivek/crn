@@ -589,6 +589,38 @@ $paramsDashboard=array('dashboard_setting'=>$encoded_params);
 
 
 }
+
+function invoice_due_notification()
+{
+## fetch invoice of particular duration according to setting
+   $f_id=$this->session->f_id;
+   $data['invoice']=[];
+   $today_date=date_create(date('Y-m-d'));
+  $condition=array('f_id'=>$f_id);
+  $result=$this->Setting_model->select('table_invoices',$condition,array('*'));
+  for($i=0;$i<count($result);$i++)
+  {
+    $date1=date_create($result[$i]['created_at']);
+    $diff=date_diff($date1,$today_date);
+    $difference=$diff->format("%a");
+    // echo $difference;
+        if($difference>0)
+        {
+                array_push($data['invoice'],$result[$i]);
+        }
+  }
+  // echo '<pre>';
+// print_r($invoice);
+ $data['_view'] = 'invoice_due_list';
+
+  $this->load->view('index.php',$data);
+//   $result[]
+// $date1=date_create("2019-03-15");
+// $date2=date_create("2013-12-12");
+// $diff=date_diff($date1,$today_date);
+// echo $diff->format("%R%a");
+
+}
 /*all function end*/
 
 }

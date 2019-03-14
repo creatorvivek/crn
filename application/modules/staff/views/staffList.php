@@ -63,6 +63,7 @@
     });
 });
      </script> -->
+      <script src="<?= base_url() ?>/assets/admin/plugins/sweetalert/sweetalert.min.js"></script>
   <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/jquery.dataTables.js"></script>
     <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
     <script src="<?= base_url() ?>assets/admin/js/pages/tables/jquery-datatable.js"></script>

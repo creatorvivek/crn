@@ -25,7 +25,7 @@
                                             <!-- <th>Qty sell</th>/ -->
                                             <th>Adding By</th> 
                                             <th>Category</th>
-                                            <th>Action</th>
+                                            <!-- <th>Action</th> -->
                                           
                                         </tr>
                                     </thead>
@@ -34,7 +34,7 @@
                                     	<?php foreach($item as $row)
                                     	{ ?>
                                         <tr>
-                                            <td><?= $row['item_name'] ?></td>
+                                            <td><a href="<?= base_url() ?>item/purchase_list?id=<?= $row['id'] ?>"><?= $row['item_name'] ?></a></td>
                                             <td><?= $row['description'] ?></td>
                                             <!-- <td><?= $row['purchase_price'] ?></td> -->
                                             <!-- <td><?= $row['selling_price'] ?></td> -->
@@ -55,12 +55,12 @@
 
 
                                              </td>
-                                             <td>
+                                            <!--  <td>
                                             	<div class="btn-group" role="group">
                                             	<a data-toggle="tooltip" title="Add Edit" href="<?= base_url() ?>item/edit_item/<?= $row['id'] ?>" class="btn btn-primary waves-effect"><i class="material-icons">create</i></a>
-                                            	<!-- <a data-toggle="tooltip" title="Add Quantity" href="<?= base_url() ?>item/add_more_item/<?= $row['id'] ?> " class="btn btn-success waves-effect"><i class="material-icons">add</i></a> -->
+                                            	
                                             </div>
-                                            </td>
+                                            </td> -->
                                     <!-- <button type="button" class="btn btn-default waves-effect">LEFT</button>
                                     <button type="button" class="btn btn-default waves-effect">MIDDLE</button>
                                     <button type="button" class="btn btn-default waves-effect">RIGHT</button> -->

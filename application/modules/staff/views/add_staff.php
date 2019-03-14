@@ -10,7 +10,7 @@
                                  <input type="hidden" name="<?= $this->security->get_csrf_token_name();?>" value="<?= $this->security->get_csrf_hash();?>">
                                 <div class="form-group form-float">
                                     <div class="form-line">
-                                        <input type="text" class="form-control" name="name" value="<?= $this->input->post('name'); ?>" required="" aria-required="true" >
+                                        <input type="text" class="form-control" name="name"  value="<?= $this->input->post('name'); ?>" required="" aria-required="true" >
                                         <label class="form-label">Name</label>
                                         <span class="text-danger"><?= form_error('name');?></span>
                                     </div>
@@ -30,11 +30,12 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="radio" name="gender" id="male" class="with-gap" value="male">
+                                    <input type="radio" name="gender" id="male" class="with-gap" value="male" <?php echo  set_radio('gender', '1'); ?> >
                                     <label for="male">Male</label>
 
-                                    <input type="radio" name="gender" id="female" class="with-gap" value="female">
+                                    <input type="radio" name="gender" id="female" class="with-gap" value="female" <?php echo  set_radio('gender', '1'); ?> >
                                     <label for="female" class="m-l-20">Female</label>
+                                    <span class="text-danger"><?= form_error('gender');?></span>
                                 </div>
                                
                                 <button class="btn btn-primary waves-effect" type="submit">SUBMIT</button>
@@ -72,6 +73,22 @@
 
 
     });
+
+   function validation()
+   {
+
+
+      var $regexname=/^([a-zA-Z]{3,16})$/;
+   
+             if (! $('.name').val().match($regexname)) {
+              // there is a mismatch, hence show the error message
+                 alert("not match");
+             }
+             else
+             {
+
+             }
+   }
  </script>
 
           

@@ -21,6 +21,7 @@ class Sales extends MY_Controller
   function add_sales()
   {
   // print_r($this->input->post());die;
+    $data['title'] = "ADD SALES";
     $f_id = $this->session->f_id;
     $staff_id = $this->session->staff_id;
     $customer_name = strip_tags($this->input->post('name', 1));
@@ -172,7 +173,7 @@ class Sales extends MY_Controller
 
   function sale_add()
   {
-
+    $data['title'] = "ADD SALES";
     $f_id = $this->session->f_id;
   // echo $f_id;die;
     $params = array('purchase_item.f_id' => $f_id,'purchase_item.quantity_for_sale>' => 0);
@@ -185,7 +186,7 @@ class Sales extends MY_Controller
   }
   function sale_service_add()
   {
-
+    $data['title'] = "ADD SALES & SERVICES";
     $f_id = $this->session->f_id;
     
     $params = array('item_list.f_id' =>$f_id,'purchase_item.quantity_for_sale>'=>0);
@@ -200,7 +201,7 @@ class Sales extends MY_Controller
   }
   function add_service()
   {
-    print_r($this->input->post());die;
+    // print_r($this->input->post());die;
       $f_id = $this->session->f_id;
     $staff_id = $this->session->staff_id;
     $customer_name = strip_tags($this->input->post('name', 1));
@@ -915,7 +916,37 @@ else if($_SERVER['REQUEST_METHOD'] == 'POST' )
 
 
 
+function invoice_due_notification()
+{
+## fetch invoice of particular duration according to setting
+   $f_id=$this->session->f_id;
+   $data['invoice']=[];
+   $today_date=date_create(date('Y-m-d'));
+  $condition=array('f_id'=>$f_id,'status!='=>'paid');
+  $result=$this->Sales_model->select('table_invoices',$condition,array('*'));
+  for($i=0;$i<count($result);$i++)
+  {
+    $date1=date_create($result[$i]['created_at']);
+    $diff=date_diff($date1,$today_date);
+    $difference=$diff->format("%a");
+    // echo $difference;
+        if($difference>0)
+        {
+                array_push($data['invoice'],$result[$i]);
+        }
+  }
+  // echo '<pre>';
+// print_r($invoice);
+ $data['_view'] = 'invoice_due_list';
 
+  $this->load->view('index.php',$data);
+//   $result[]
+// $date1=date_create("2019-03-15");
+// $date2=date_create("2013-12-12");
+// $diff=date_diff($date1,$today_date);
+// echo $diff->format("%R%a");
+
+}
 
 
 

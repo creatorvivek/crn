@@ -145,6 +145,9 @@ function demo()
 }
 function form()
 {
+   $this->load->model('Test_model');
+   $params = array('item_list.f_id' =>14);
+    $data['item'] = $this->Test_model->select('table_item',$params, array('*'));
 $data['_view'] = 'form';
   $this->load->view('index',$data);
  

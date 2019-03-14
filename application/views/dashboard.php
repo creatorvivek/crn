@@ -13,7 +13,22 @@
             <div class="block-header">
                 <h2>DASHBOARD</h2>
             </div>
+                <div class="page-loader-wrapper">
+                    <div class="loader">
+                        <div class="preloader">
 
+                            <div class="spinner-layer pl-red">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <p>Please wait...</p>
+                    </div>
+            </div>
             <!-- Widgets -->
             <div class="row clearfix">
                 <?php if($this->session->type==2 || $this->session->type==3) { ?>
@@ -673,7 +688,7 @@
             
              <!-- Chart Plugins Js -->
     <script src="<?= base_url() ?>assets/admin/plugins/chartjs/Chart.bundle.min.js"></script>
-    <script src="<?= base_url() ?>/assets/admin/plugins/jquery-countto/jquery.countTo.min.js"></script>
+    <script src="<?= base_url() ?>/assets/admin/plugins/jquery-countto/jquery.countTo.js"></script>
 
    
     <script type="text/javascript">

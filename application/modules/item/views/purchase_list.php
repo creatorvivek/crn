@@ -62,7 +62,7 @@
                                              <td>
                                             	<div class="btn-group" role="group">
                                             	<a data-toggle="tooltip" title="Add Edit" href="<?= base_url() ?>item/edit_item/<?= $row['id'] ?>" class="btn btn-primary waves-effect"><i class="material-icons">create</i></a>
-                                            	<a data-toggle="tooltip" title="Add Quantity" href="<?= base_url() ?>item/add_more_item/<?= $row['id'] ?> " class="btn btn-success waves-effect"><i class="material-icons">add</i></a>
+                                            	<!-- <a data-toggle="tooltip" title="Add Quantity" href="<?= base_url() ?>item/add_more_item/<?= $row['id'] ?> " class="btn btn-success waves-effect"><i class="material-icons">add</i></a> -->
                                             </div>
                                             </td>
                                     <!-- <button type="button" class="btn btn-default waves-effect">LEFT</button>

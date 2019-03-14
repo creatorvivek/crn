@@ -136,8 +136,8 @@ input:-webkit-autofill + label {
           </div> -->
           <div class="col-md-6">
             <div class="form-group">
-              <select class="form-control show-tick item" name="item[]" id="item1"  onchange="test_two(1)">
-                <option value="">--select item--</option>
+              <select class="form-control show-tick item" name="item[]" id="item1" data-live-search="true" onchange="test_two(1)" >
+                <option value="">--Select item--</option>
                 <?php  foreach($items as $row)
                 {
                   ?>

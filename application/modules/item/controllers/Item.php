@@ -16,7 +16,7 @@ class Item extends MY_Controller
   function add_item()
   {
     $f_id = $this->session->f_id;
-
+    $data['title'] = 'ADD ITEM';
 
     $params = array('f_id' => $f_id);
     $this->load->model('category/Category_model');
@@ -27,22 +27,22 @@ class Item extends MY_Controller
     $data['_view'] = 'add_item';
     $this->load->view('index', $data);
   }
-function add_purchase()
-{
-$f_id = $this->session->f_id;
+        function add_purchase()
+        {
+        $f_id = $this->session->f_id;
 
+         $data['title'] = 'ADD PURCHASE';
+            $params = array('f_id' => $f_id);
+            $this->load->model('category/Category_model');
+            $data['vendor'] = $this->Item_model->select('table_vendor', $params, array('id', 'name'));
+            $data['item'] = $this->Item_model->select('table_item', $params, array('id','item_name'));
+        // var_dump($category);die;
+            // $data['category'] = $category;
+            $data['heading'] = 'ADD PURCHASE';
+            $data['_view'] = 'add_purchase';
+            $this->load->view('index', $data);
 
-    $params = array('f_id' => $f_id);
-    $this->load->model('category/Category_model');
-    $data['vendor'] = $this->Item_model->select('table_vendor', $params, array('id', 'name'));
-    $data['item'] = $this->Item_model->select('table_item', $params, array('id','item_name'));
-// var_dump($category);die;
-    // $data['category'] = $category;
-    $data['heading'] = 'ADD PURCHASE';
-    $data['_view'] = 'add_purchase';
-    $this->load->view('index', $data);
-
-}
+        }
   function item_list()
   {
 
@@ -187,7 +187,7 @@ function add_purchase_process()
         'model_no' => @$model_number[$i] 
 
       );
-      $insertItem = $this->Item_model->insert('table_item_details',$insertItemDetailsParams);
+      $insertItemDetails = $this->Item_model->insert('table_item_details',$insertItemDetailsParams);
          // print_r($insertItem);
 
     }
@@ -255,13 +255,22 @@ function add_item_process()
 }
 function purchase_list()
 {
+  $data['title'] = 'PURCHASE LIST';
   $f_id = $this->session->f_id;
+  if($this->input->get('id'))
+  {
+    $item_id=$this->input->get('id');
+    $condition = array('purchase_item.f_id' => $f_id,'item_id'=>$item_id);
+  }
+  else
+  { 
 $condition = array('purchase_item.f_id' => $f_id);
+   } 
  $categoryParam = array('f_id' => $f_id);
-   
     $category = $this->Item_model->select('table_category', $categoryParam, array('category_id', 'name'));
     $data['category'] = $category;
 $data['purchase']=$this->Item_model->purchase_list('table_purchase',$condition,array('purchase_item.id','purchase_item.selling_price','purchase_item.purchase_price','purchase_item.quantity','purchase_item.quantity_out','purchase_item.item_company','purchase_item.quantity_for_sale','purchase_item.unit','purchase_item.created_at','staff.name as staff_name','vendor.name as vendor_name','item_list.item_name','item_list.category'));
+
 // echo '<pre>';
 // print_r($data['purchase']);
 $data['_view'] = 'purchase_list';
@@ -303,7 +312,7 @@ function edit_item($id)
   $category = $this->Category_model->select('table_category', $catParams, array('category_id', 'name'));
   // var_dump($category);
   $data['category'] = $category;
-  $data['item'] = $this->Item_model->select('table_item', $condition, array('item.id', 'item_name', 'description', 'selling_price', 'purchase_price', 'model_no', 'serial_no', 'item.created_by', 'item.created_at', 'category', 'item_company','quantity','unit'));
+  $data['item'] = $this->Item_model->select('table_purchase', $condition, array('id', 'selling_price', 'purchase_price', 'model_no', 'serial_no', 'purchase_item.created_by', 'purchase_item.created_at', 'item_company','quantity','unit'));
   // print_r($data['item']);die;
 
 
@@ -312,7 +321,7 @@ function edit_item($id)
   if (isset($data['item'][0]['id'])) {
     $this->load->library('form_validation');
 
-    $this->form_validation->set_rules('name', 'Name', 'required|max_length[100]');
+    $this->form_validation->set_rules('selling_amount', 'Selling Amount', 'required');
     // $this->form_validation->set_rules('email','Email','max_length[50]|valid_email');
 
     // $this->form_validation->set_rules('paddress','Permanent Address','required');
@@ -322,37 +331,37 @@ function edit_item($id)
 
       $staff_id = $this->session->staff_id;
 
-      $item_name = strip_tags($this->input->post('name', 1));
-      $description = strip_tags($this->input->post('description', 1));
+      // $item_name = strip_tags($this->input->post('name', 1));
+      // $description = strip_tags($this->input->post('description', 1));
       $selling_price = strip_tags($this->input->post('selling_amount', 1));
       $purchase_price = strip_tags($this->input->post('purchase_amount', 1));
       $item_category = strip_tags($this->input->post('category_id', 1));
 
-      $model_number = strip_tags($this->input->post('model_number', 1));
-      $serial_number = strip_tags($this->input->post('serial_number', 1));
+      // $model_number = strip_tags($this->input->post('model_number', 1));
+      // $serial_number = strip_tags($this->input->post('serial_number', 1));
       $company_name = strip_tags($this->input->post('company_name', 1));
       $unit =         strip_tags($this->input->post('unit', 1));
-      $qty =         strip_tags($this->input->post('qty', 1));
+      // $qty =         strip_tags($this->input->post('qty', 1));
       $itemParams = array(
-        'item_name' => $item_name,
-        'description' => $description,
-        'category' => $item_category,
-        'quantity'=>$qty,
+        // 'item_name' => $item_name,
+        // 'description' => $description,
+        // 'category' => $item_category,
+        // 'quantity'=>$qty,
         'unit'=>$unit,
         'selling_price' => $selling_price,
         'purchase_price' => $purchase_price,
-        'f_id' => $f_id,
+        // 'f_id' => $f_id,
 // 'f_id'=>$f_id,
         'item_company' => $company_name,
-        'serial_no' => $serial_number,
-        'model_no' => $model_number,
+        // 'serial_no' => $serial_number,
+        // 'model_no' => $model_number,
     // 'created_at'=>date('Y-m-d H-i-s'),
     // 'created_by'=>$staff_id
 
       );
 // var_dump($params);die;
 
-      $this->Item_model->update($condition, 'table_item', $itemParams);
+      $this->Item_model->update_col('table_purchase',$condition,$itemParams);
 
 
 

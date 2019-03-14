@@ -72,7 +72,7 @@ input:-webkit-autofill + label {
   <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
     <div class="card">
       <div class="header" align="center">
-        <h2><?php echo isset($heading)?$heading:'ADD FOR SALE' ?></h2>
+        <h2><?php echo isset($heading)?$heading:'ADD SALES & SERVICES' ?></h2>
         
       </div>
       <div class="body">
@@ -135,8 +135,8 @@ input:-webkit-autofill + label {
           </div> -->
           <div class="col-md-6">
             <div class="form-group">
-              <select class="form-control show-tick item" name="item[]" id="item1"  onchange="test_two(1)">
-                <option value="">--select item--</option>
+              <select class="form-control show-tick item" name="item[]" id="item1" data-live-search="true"  onchange="select_item(1)">
+                <option value="">--Select item--</option>
                 <?php  foreach($items as $row)
                 {
                   ?>
@@ -148,8 +148,8 @@ input:-webkit-autofill + label {
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <select class="form-control show-tick service" name="item[]" id="service1"  onchange="service(1)">
-                <option value="">--select Service--</option>
+              <select class="form-control show-tick service" name="item[]" data-live-search="true" select_item id="service1"  onchange="service(1)">
+                <option value="">--Select Service--</option>
                 <?php  foreach($service as $row)
                 {
                   ?>
@@ -166,7 +166,8 @@ input:-webkit-autofill + label {
           <input type="hidden" class="pincode" name="pincode">
           <input type="hidden" class="city" name="city">
           <input type="hidden" class="address" name="address">
-          <div  id="addRow" ></div>
+          <!-- <div  class="addRow" ></div> -->
+          <!-- <div  id="addRows" ></div> -->
           <div class="col-md-6">
             <div class="form-group form-float">
               <div class="form-line">
@@ -414,42 +415,38 @@ $.ajax({
 });
 }
 
-function addRow()
-{
-// $('#add').click(function(){
-  var item_id=$('#item1').val();
-  console.log(item_id);
-  $.ajax({
-    type: "GET",
-    url: "<?= base_url() ?>item/fetch_item",
-// data:{search:search},
-success: function (data) {
-// console.log(data);
-var obj=JSON.parse(data);
-var option;
-for(var i=0;i<obj.length;i++)
-{
- if(obj[i].id==item_id)
- {
-  continue;
-} 
-option+='<option value="'+obj[i].id+'">'+obj[i].item_name+'</option>';
-}
+// function addRow()
+// {
 
-var row='<div class="row clearfix" id="row' + count + '"><div class="col-md-6"><div class="form-group"><select class="form-control show-tick item" name="item[]" id="item'+count+'" required="" onchange="showPrice('+count+')"><option value="">--select item--</option>'+option+'</select></div></div><div class="col-md-4"><div class="form-group"><div class="form-line"><input type="text" class="form-control price amount'+count+'" placeholder="amount" name="amount[]" required="" ></div></div></div><div class="col-md-2"><div class="form-group form-float"><button type="button" class="btn btn-danger removeList" id="remove"  data-row="row' + count + '"  onclick="removeList()">-</button></div></div></div>';
-$('#addRow').append(row);
-count ++;
-// $('.price').each(function() {
-//                price.push($(this).val());
-//             });
-// console.log(price);
-},
-});  
+//   var item_id=$('#item1').val();
+//   console.log(item_id);
+//   $.ajax({
+//     type: "GET",
+//     url: "<?= base_url() ?>item/fetch_item",
 
-// console.log('s');
-// });
+// success: function (data) {
 
-}
+// var obj=JSON.parse(data);
+// var option;
+// for(var i=0;i<obj.length;i++)
+// {
+//  if(obj[i].id==item_id)
+//  {
+//   continue;
+// } 
+// option+='<option value="'+obj[i].id+'">'+obj[i].item_name+'</option>';
+// }
+
+// var row='<div class="row clearfix" id="row' + count + '"><div class="col-md-6"><div class="form-group"><select class="form-control show-tick item" name="item[]" id="item'+count+'" required="" onchange="showPrice('+count+')"><option value="">--select item--</option>'+option+'</select></div></div><div class="col-md-4"><div class="form-group"><div class="form-line"><input type="text" class="form-control price amount'+count+'" placeholder="amount" name="amount[]" required="" ></div></div></div><div class="col-md-2"><div class="form-group form-float"><button type="button" class="btn btn-danger removeList" id="remove"  data-row="row' + count + '"  onclick="removeList()">-</button></div></div></div>';
+// $('#addRow').append(row);
+// count ++;
+
+// },
+// });  
+
+
+
+// }
 
 function removeList()
 {
@@ -526,7 +523,7 @@ function total()
 
 }
 
-function test_two(id)
+function select_item(id)
 {
 
  $('#error_item').hide();

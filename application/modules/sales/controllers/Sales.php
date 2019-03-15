@@ -20,7 +20,8 @@ class Sales extends MY_Controller
 ## process of sales add
   function add_sales()
   {
-  // print_r($this->input->post());die;
+        // print_r($this->input->post());die;
+
     $data['title'] = "ADD SALES";
     $f_id = $this->session->f_id;
     $staff_id = $this->session->staff_id;
@@ -58,7 +59,9 @@ class Sales extends MY_Controller
  // print_r($params);die;
     $addSales = $this->Sales_model->insert('table_sales', $params);
 #update stock
-    for ($i = 0; $i < count($item_id); $i++) { 
+
+    for ($i = 0; $i < count($item_id); $i++) 
+    { 
       # code...
 
       $condition = array('id' => $item_id[$i]);
@@ -79,27 +82,33 @@ class Sales extends MY_Controller
         'quantity'=>$qty[$i],
         'order_no' => $order_no,
         'created_at' =>$date,
-        'discount_percent'=>$discount[$i]
+        'purchase_price'=>$quantity[0]['purchase_price'],
+        'discount_percent'=>$discount[$i],
+        'type'=>1
       );
+      
       $addSalesDetails = $this->Sales_model->insert('table_sales_details', $saleDetailsParam);
 
       ##for profit loss graph
 
-      $profitLossParam=array(
-        'item_purchase_id'=>$item_id[$i],
-        'item_id'=>$quantity[0]['item_id'],
-        'purchase_price'=>$quantity[0]['purchase_price'],
-        'selling_price'=>round($amount[$i]/$qty[$i]),
-        'qty'=>$qty[$i],
-        'created_at'=>$date,
-        'f_id'=>$f_id
+      // $profitLossParam=array(
+      //   'item_purchase_id'=>$item_id[$i],
+      //   'item_id'=>$quantity[0]['item_id'],
+      //   'purchase_price'=>$quantity[0]['purchase_price'],
+      //   'selling_price'=>round($amount[$i]/$qty[$i]),
+      //   'qty'=>$qty[$i],
+      //   'created_at'=>$date,
+      //   'f_id'=>$f_id
 
 
-      );
-       $addGraphDetails = $this->Sales_model->insert('table_item_graph',$profitLossParam);
+      // );
+      //  $addGraphDetails = $this->Sales_model->insert('table_item_graph',$profitLossParam);
       /*end profit loss graph*/
 
     }
+   
+
+
     $particularParam = array(
       'particular' => $item_name,
       'price' => $amount,
@@ -170,6 +179,187 @@ class Sales extends MY_Controller
  // $serial_number=strip_tags($this->input->post('serial_number',1));
  // $company_name=strip_tags($this->input->post('company_name',1));
   }
+ function add_sales_service()
+  {
+        
+     print_r($this->input->post());die;
+    $data['title'] = "ADD SALES & SERVICE";
+    $f_id = $this->session->f_id;
+    $staff_id = $this->session->staff_id;
+    $customer_name = strip_tags($this->input->post('name', 1));
+    $customer_id = strip_tags($this->input->post('customer_id', 1));
+    $qty=$this->input->post('qty',1);
+ // $description=strip_tags($this->input->post('description',1));
+    $mobile = strip_tags($this->input->post('mobile', 1));
+    $email = strip_tags($this->input->post('email', 1));
+    $address = strip_tags($this->input->post('address', 1));
+    $pincode = strip_tags($this->input->post('pincode', 1));
+    $city = strip_tags($this->input->post('city', 1));
+    $unit =$this->input->post('unit', 1);
+    $selling_price = $this->input->post('selling_amount', 1);
+    $item_id = $this->input->post('item_id', 1);
+    $amount = $this->input->post('item_price', 1);
+    $item_name = $this->input->post('item_name', 1);
+    $total = strip_tags($this->input->post('total', 1));
+    $discount=$this->input->post('discount', 1);
+    $method=$this->input->post('method', 1);
+  // $total=22;
+    // print_r($item_name);die;
+    $orderParams = array('f_id' => $f_id);
+    $order_no = $this->Sales_model->get_max_order_no('table_sales', $orderParams);
+    if (!$order_no) {
+      $order_no = 1;
+    }
+
+    $itemCount = count($item_id);
+
+    $date = date('Y-m-d H:i:s');
+
+   
+    $params = array('customer_name' => $customer_name, 'customer_id' => $customer_id, 'mobile' => $mobile, 'email' => $email, 'f_id' => $f_id, 'created_by' => $staff_id, 'created_at' => $date, 'total' => $total, 'order_id' => $order_no);
+ // print_r($params);die;
+    $addSales = $this->Sales_model->insert('table_sales', $params);
+#update stock
+
+    for ($i = 0; $i < count($item_id); $i++) 
+    { 
+      # code...
+
+      $condition = array('id' => $item_id[$i]);
+      ##fetch item quantity 
+      $quantity=$this->Sales_model->select('table_purchase',$condition,array('quantity_for_sale','purchase_price','item_id'));
+      $reamaning_item=$quantity[0]['quantity_for_sale']-$qty[$i];
+      $quantity_out=$quantity[0]['quantity_out'];
+      ##update how much quantity out and how much reamaning for sales
+      $quantity_out_update = $quantity[0]['quantity_out']+$qty[$i];
+      $itemParams = array('quantity_for_sale' => $reamaning_item,'quantity_out'=>$quantity_out_update);
+      $this->Sales_model->update_col('table_purchase', $condition, $itemParams);
+
+    ##inserts sale details
+      $saleDetailsParam = array(
+        'particular' => $item_id[$i],
+        'price' => $amount[$i],
+        'f_id' => $f_id,
+        'quantity'=>$qty[$i],
+        'order_no' => $order_no,
+        'created_at' =>$date,
+        'purchase_price'=>$quantity[0]['purchase_price'],
+        'discount_percent'=>$discount[$i],
+        'type'=>1
+      );
+      
+      $addSalesDetails = $this->Sales_model->insert('table_sales_details', $saleDetailsParam);
+
+      ##for profit loss graph
+
+      // $profitLossParam=array(
+      //   'item_purchase_id'=>$item_id[$i],
+      //   'item_id'=>$quantity[0]['item_id'],
+      //   'purchase_price'=>$quantity[0]['purchase_price'],
+      //   'selling_price'=>round($amount[$i]/$qty[$i]),
+      //   'qty'=>$qty[$i],
+      //   'created_at'=>$date,
+      //   'f_id'=>$f_id
+
+
+      // );
+      //  $addGraphDetails = $this->Sales_model->insert('table_item_graph',$profitLossParam);
+      /*end profit loss graph*/
+
+    }
+    #for service
+    for($j = 0; $j < count($service_id); $i++)
+    {
+       ##inserts sale details
+       // $item_id = $this->input->post('item_id', 1);
+     $service_amount = $this->input->post('service_price', 1);
+      $service_name = $this->input->post('service_name', 1);
+      $service_discount=$this->input->post('service_discount', 1);
+      $serviceDetailsParam = array(
+        'particular' => $service_id[$i],
+        'price' => $service_amount[$i],
+        'f_id' => $f_id,
+        'quantity'=>$qty[$i],
+        'order_no' => $order_no,
+        'created_at' =>$date,
+        'purchase_price'=>$quantity[0]['purchase_price'],
+        'discount_percent'=>$discount[$i],
+        'type'=>2
+      );
+      
+      $addSalesDetails = $this->Sales_model->insert('table_sales_details', $serviceDetailsParam);
+    }
+    $particularParam = array(
+      'particular' => $item_name,
+      'price' => $amount,
+      'quantity'=>$qty,
+      'unit'=>$unit
+    );
+    // print_r($particularParam);die;
+    $invoiceParams = array(
+      'customer_name' => $customer_name, 'mobile' => $mobile, 'email' => $email, 'f_id' => $f_id, 'created_by' => $staff_id, 'created_at' => $date, 'order_id' => $order_no, 'customer_id' => $customer_id,'c_city'=>$city,'c_pincode'=>$pincode,'address'=>$address
+
+    );
+    $invoice_id = modules::run('account/account/invoice', $invoiceParams, $particularParam);
+  ## paid amount
+    $paid_amount= $this->input->post('paid_amount');
+    if ($paid_amount > 0) 
+    {
+        ##generate Payment id
+      $payment_id= modules::run('account/account/get_payment_id');
+      $paidParams = array
+      (
+        'f_id' => $f_id,
+        'payment_id'=>$payment_id,
+        'invoice_id' => $invoice_id,
+        'staff_id' => $staff_id,
+        'customer_id' => $customer_id,
+        'payment_method' => $method,
+        'amount' => $paid_amount,
+        'order_reference' => $order_no,
+        'payment_date' => date('Y-m-d H-i-s')
+
+
+      );
+
+      $payment_reference_id=$this->Sales_model->insert('table_payment_details', $paidParams);
+      $invoiceCondition=array(
+        'invoice_id'=>$invoice_id,
+        'f_id'=>$f_id
+      );
+      $invoicePaidParams=array(
+        'paid'=>$paid_amount
+      );
+      $this->Sales_model->update_col('table_invoices',$invoiceCondition,$invoicePaidParams); 
+      $this->load->model('Account/Account_model');
+      $this->Account_model->maintain_status_invoice($paid_amount,$f_id,$invoice_id);
+      $accountTransaction=array(
+        'reference_id'=>$payment_reference_id,
+        'reference_type'=>2,
+        'credit'=>$paid_amount,
+        'f_id'=>$f_id,
+        'reciept_id'=>$payment_id,
+        'customer_id'=>$customer_id,
+                  // 'caf_id'=>$params[0]['id'],
+        'created_at'=>date('Y-m-d H-i-s')
+
+      );
+      $this->Account_model->insert('table_account_transaction',$accountTransaction);
+
+    }
+
+    $this->session->alerts = array(
+      'severity' => 'success',
+      'title' => 'successfully added'
+    );
+    redirect('sales/sales_list');
+
+  }
+
+
+
+
+
 
   function sale_add()
   {
@@ -251,7 +441,8 @@ class Sales extends MY_Controller
         'quantity'=>$qty[$i],
         'order_no' => $order_no,
         'created_at' =>$date,
-        'discount_percent'=>$discount[$i]
+        'discount_percent'=>$discount[$i],
+        'type'=>2
       );
       $addSalesDetails = $this->Sales_model->insert('table_sales_details', $saleDetailsParam);
     }
@@ -918,11 +1109,15 @@ else if($_SERVER['REQUEST_METHOD'] == 'POST' )
 
 function invoice_due_notification()
 {
-## fetch invoice of particular duration according to setting
-   $f_id=$this->session->f_id;
+  $f_id=$this->session->f_id;
    $data['invoice']=[];
    $today_date=date_create(date('Y-m-d'));
-  $condition=array('f_id'=>$f_id,'status!='=>'paid');
+  $condition=array('f_id'=>$f_id);
+  ##fetch seller invoice due day
+  $setting_data=$this->Sales_model->select('table_seller_setting',$condition,array('invoice_due_day'));
+  $invoice_due_day=$setting_data[0]['invoice_due_day'];
+  // print_r($invoice_due_day);die;
+
   $result=$this->Sales_model->select('table_invoices',$condition,array('*'));
   for($i=0;$i<count($result);$i++)
   {
@@ -930,7 +1125,7 @@ function invoice_due_notification()
     $diff=date_diff($date1,$today_date);
     $difference=$diff->format("%a");
     // echo $difference;
-        if($difference>0)
+        if($difference>$invoice_due_day)
         {
                 array_push($data['invoice'],$result[$i]);
         }
@@ -940,11 +1135,6 @@ function invoice_due_notification()
  $data['_view'] = 'invoice_due_list';
 
   $this->load->view('index.php',$data);
-//   $result[]
-// $date1=date_create("2019-03-15");
-// $date2=date_create("2013-12-12");
-// $diff=date_diff($date1,$today_date);
-// echo $diff->format("%R%a");
 
 }
 

@@ -15,125 +15,15 @@ class Setting extends MY_Controller
 
 function index()
 {
-  // $f_id=$this->session->f_id;
-  // $staff_params=array(
-  //   'f_id'=>$f_id
-  // );
-  // $staff_info = modules::run('api_call/api_call/call_api',''.api_url().'staff/fetchstaff',$staff_params,'POST');
-  // if($staff_info['status']=='success')
-  // {
-
-  //   $data['staff']=$staff_info['data'];
-
-  // }
-
-  $data['_view'] = 'setting_form';
+  $condition=array('f_id'=>$this->session->f_id);
+  $data['seller_data']=$this->Setting_model->select('table_seller_setting',$condition,array('tax','auto_logout','auto_logout_time','panel_color'));
+  $data['tax']=json_decode($data['seller_data'][0]['tax'],1);
+  // print_r($data['tax']);die;
+$data['_view'] = 'general';
   $this->load->view('index',$data);
 }
 
 
-
-
-
-
-##will improve
-
-function frenchise_setting_edit()
-{
-  $f_id=$this->uri->segment(3);
-  $config['upload_path']          = './uploads/frenchise';
-  $config['allowed_types']        = 'gif|jpg|png';
-  $this->load->library('upload', $config);
-  $gst_number = $this->input->post('gst_number');
-  // echo ($gst_number);
-  if($gst_number=='')
-  {
-    $gst_number=NULL;
-  }
-  $bank_account= $this->input->post('bank_account');
-  $isp_license = $this->input->post('isp_license');
-  $billing_cycle = $this->input->post('billing_cycle');
-  $tax_name = $this->input->post('tax_name');
-  $tax_percent = $this->input->post('tax_percent');
-  $terms=$this->input->post('terms');
-  $customer_care_number=$this->input->post('customer_care');
-  $short_name=$this->input->post('short_name');
-  $name = $this->input->post('f_name');
-  
-  $email= $this->input->post('email');
-  $mobile = $this->input->post('mobile');
-
-  $address = $this->input->post('address');
-  $params=array(
-    'isp_license'=>$isp_license,
-    'bank_account'=>$bank_account,
-    'billing_cycle'=>$billing_cycle,
-    'gst_number'=>$gst_number,
-    'terms'=>$terms,
-    'short_name'=>$short_name,
-    'customer_care'=>$customer_care_number,
-    'f_id'=>$f_id
-
-  );
- // var_dump( $tax_name);die;   
-  $name_array=explode(",",$tax_name);
-  $percent_array=explode(",",$tax_percent);
-  $length=count($name_array);
-// var_dump( $name_array);die;
-  $fullTaxArray=[];
-  for ($i=0; $i <$length ; $i++) { 
-  # code...
-    $taxArray = array($name_array[$i] => $percent_array[$i] );
-    array_push($fullTaxArray,$taxArray);
-  }
-
-
-  $tax=json_encode($fullTaxArray);
-
-  $taxParams=array(
-    'f_id'=>$f_id,
-    'tax'=>$tax
-
-  );
-
-  $update_tax=modules::run('api_call/api_call/call_api',''.api_url().'frenchise/updateTax',$taxParams,'POST');
-  $update_frenchise_account=modules::run('api_call/api_call/call_api',''.api_url().'frenchise/updateFrenchiseAccount',$params,'POST');
-  $frenchiseParams=array(
-    'id'=>$f_id,
-    'name'=>$name,
-    'email'=>$email,
-    'mobile'=>$mobile,
-    
-    'address'=>$address
-  );
-  if($this->upload->do_upload('logo'))
-  {
-    $data['image'] =  $this->upload->data();
-    $image_path=$data['image']['raw_name'].$data['image']['file_ext'];
-    $frenchiseParams['logo']=$image_path;
-  }
-  if($this->upload->do_upload('profile_pic'))
-  {
-    $data['images'] =  $this->upload->data();
-    $image_path=$data['images']['raw_name'].$data['images']['file_ext'];
-    $frenchiseParams['profile_pic']=$image_path;
-  }
-
-##add frenchise
-  // var_dump($frenchiseParams);
-  $update_data=modules::run('api_call/api_call/call_api',''.api_url().'frenchise/updateFrenchiseDetails',$frenchiseParams,'POST');
-
-// $data['message']='successfully Updated';
-// $data['_view'] = 'setting_edit';
-  // $this->load->view('index',$data);
-  $this->session->alerts = array(
-      'severity'=> 'success',
-      'title'=> 'successfully updated'
-    );
-redirect('setting/frenchise_setting');
-// var_dump($update_frenchise_account);
-
-}
 
 function initial_setting()
 {
@@ -402,10 +292,10 @@ function general_setting()
 {
 
   $condition=array('f_id'=>$this->session->f_id);
-  $data['seller_data']=$this->Setting_model->select('table_seller_setting',$condition,array('tax','auto_logout','auto_logout_time','panel_color'));
+  $data['seller_data']=$this->Setting_model->select('table_seller_setting',$condition,array('tax','auto_logout','auto_logout_time','panel_color','invoice_due_day'));
   $data['tax']=json_decode($data['seller_data'][0]['tax'],1);
   // print_r($data['tax']);die;
-$data['_view'] = 'company';
+$data['_view'] = 'general';
   $this->load->view('index',$data);
 
 }
@@ -597,6 +487,10 @@ function invoice_due_notification()
    $data['invoice']=[];
    $today_date=date_create(date('Y-m-d'));
   $condition=array('f_id'=>$f_id);
+  ##fetch seller invoice due day
+  $invoice_due_day=$this->Setting_model->select('table_seller_setting',$condition,array('invoice_due_day'));
+  print_r($invoice_due_day);die;
+  for($i=0;$i<count($result);$i++)
   $result=$this->Setting_model->select('table_invoices',$condition,array('*'));
   for($i=0;$i<count($result);$i++)
   {
@@ -604,7 +498,7 @@ function invoice_due_notification()
     $diff=date_diff($date1,$today_date);
     $difference=$diff->format("%a");
     // echo $difference;
-        if($difference>0)
+        if($difference>$invoice_due_day)
         {
                 array_push($data['invoice'],$result[$i]);
         }
@@ -614,11 +508,33 @@ function invoice_due_notification()
  $data['_view'] = 'invoice_due_list';
 
   $this->load->view('index.php',$data);
-//   $result[]
-// $date1=date_create("2019-03-15");
-// $date2=date_create("2013-12-12");
-// $diff=date_diff($date1,$today_date);
-// echo $diff->format("%R%a");
+
+
+}
+
+function invoice_setting_update()
+{
+  $due_day=$this->input->post('due_day');
+  $f_id=$this->session->f_id;
+$condition=array('f_id'=>$f_id);
+$params=array('invoice_due_day'=>$due_day);
+   $result=$this->Setting_model->update_col('table_seller_setting',$condition,$params);
+   if($result=='success')
+ {
+  $this->session->alerts = array(
+    'severity'=> 'success',
+    'title'=> 'successfully updated apply after next login'
+  );
+}
+else
+{
+  $this->session->alerts = array(
+    'severity'=> 'success',
+    'title'=> 'not updated'
+  );
+}
+
+ redirect('setting/general_setting');
 
 }
 /*all function end*/

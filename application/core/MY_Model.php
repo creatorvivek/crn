@@ -256,6 +256,7 @@ function data_between_date($table_name,$display_contents,$condition,$interval_un
 
  $this->db->where($condition);
  // if(!empty($start_date) && !empty($end_date))
+ if($table_row)
   $this->db->where(" DATE(".$table_row.") BETWEEN DATE_SUB( CURDATE( ),".$interval_unit." ) AND CURDATE( )");
   if($group_by)
      $this->db->group_by(''.$group_by.'(created_at)');

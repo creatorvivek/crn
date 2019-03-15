@@ -1,7 +1,7 @@
 <?php
 
 
-class Email extends MY_Controller{
+class Email extends MX_Controller{
   function __construct()
   {
     parent::__construct();

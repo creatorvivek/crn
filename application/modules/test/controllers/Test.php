@@ -113,7 +113,7 @@ function profiling()
 {
   $this->output->enable_profiler(TRUE);
 }
-function time()
+function time_demo()
 {
 $r=date('Y/m/d',strtotime("-1 days"));
 echo $r;

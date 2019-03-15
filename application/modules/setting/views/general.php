@@ -13,6 +13,7 @@
         <ul class="nav nav-tabs tab-nav-right" role="tablist">
           <li role="presentation" class="active"><a href="#profile" data-toggle="tab">GENERAL SETTING</a></li>
           <li role="presentation" ><a href="#home" data-toggle="tab">TAX SETTING</a></li>
+          <li role="presentation" ><a href="#invoice_due" data-toggle="tab">INVOICE DUE SETTING</a></li>
           <!-- <li role="presentation" ><a href="#dashboard" data-toggle="tab">DASHBOARD SETTING</a></li> -->
           <!-- <li role="presentation"><a href="#messages" data-toggle="tab">MESSAGES</a></li>
             <li role="presentation"><a href="#settings" data-toggle="tab">SETTINGS</a></li> -->
@@ -175,7 +176,26 @@
   </div>
 
   <button type="submit" class="btn btn-success dashboard_submit" >UPDATE</button>
+</form>
 </div>
+<div role="tabpanel" class="tab-pane" id="invoice_due">
+          <form method="post" action="<?= base_url() ?>setting/invoice_setting_update">  
+             <input type="hidden" name="<?= $this->security->get_csrf_token_name();?>" value="<?= $this->security->get_csrf_hash();?>">  
+              <div class="col-md-4">
+                <div class="form-group form-float">
+                 <div class="form-line">
+                  <input type="text"  class="form-control" name="due_day" value="<?= $seller_data[0]['invoice_due_day'] ?>" aria-required="true"  data-toggle="tooltip" title="the number of days after invoice date when due notification is shows" />
+                  <label  class="col-md-12 form-label"><span class="text-danger">*</span>DUE DAYS OF INVOICE</label>
+                </div>
+
+              </div>
+            </div>
+              <!-- <div class="col-md-12"> -->
+         
+          <button type="submit" class="btn btn-success" >Submit</button>
+        
+      <!-- </div> -->
+          </form>
 </div>
 </div>
 </div>

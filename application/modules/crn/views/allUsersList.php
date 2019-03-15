@@ -5,6 +5,7 @@
           <a href="<?= site_url('crn/add_crn'); ?>" class="btn btn-success ">Add Customer</a>
         </div> 
         <form action="<?= base_url() ?>crn/customer_list" method="post">
+           <input type="hidden" name="<?php echo $this->security->get_csrf_token_name();?>" value="<?php echo $this->security->get_csrf_hash();?>">
       <div class="body">
         <div class="row clearfix">
          
@@ -17,7 +18,7 @@
                                             <input type="text" class="form-control" id="daterange" name="date_range" placeholder="select date range" autocomplete="off" required>
                                         </div>
                                     </div>
-                                </div>
+               </div>
         <div class="col-md-1">
           <div class="form-group">
             <!-- <label>dfsdf </label> -->
@@ -106,7 +107,7 @@
     
     <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/jquery.dataTables.js"></script>
     <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-    <script src="<?= base_url() ?>assets/admin/js/pages/tables/jquery-datatable.js"></script>
+    <!-- <script src="<?= base_url() ?>assets/admin/js/pages/tables/jquery-datatable.js"></script> -->
 <script type="text/javascript">
 $(document).ready( function () {
 $('.user_table').DataTable(

@@ -283,7 +283,7 @@ function fetch_amount()
 {
   $item_id = $this->input->post('item_id');
   $params = array('purchase_item.id' => $item_id);
-  $item = $this->Item_model->fetch_item_details('table_purchase', $params, array('purchase_item.id', 'selling_price', 'item_name','quantity','unit'));
+  $item = $this->Item_model->fetch_item_details('table_purchase', $params, array('purchase_item.id', 'selling_price', 'item_name','quantity_for_sale','unit'));
    // print_r($item);
   echo json_encode($item[0]);
 

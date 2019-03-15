@@ -53,6 +53,35 @@ class Login extends MX_Controller
           $sellerData=$this->Login_model->fetchSellerInfo('table_login',$sellerCondition,array('name','email','mobile','invoice_template','reciept_template','tax','company_name','profile_image','panel_color','menu','auto_logout','auto_logout_time','dashboard_setting'));
           // print_r($sellerData);die;
 #set session data
+
+
+// $this->session->name = '';
+ #default value
+// $this->session->profileImage = '';
+ #default value
+$userData = '';
+switch ($authenticationData['authorization_id']){
+    case 1:
+#got for admin user at employ table & check for authentication ID and get school id
+    // $userData = $this->Login_model->getEmployDetails($authenticationData['user_id']);
+    // $this->session->SchoolId = $userData['school_id'];
+// $this->session->organizationName = $userData['organization_name'];
+    // $school_name= modules::run('admin/admin/getSchoolName',$this->session->SchoolId);
+    // $this->session->SchoolName =$school_name['organization_name'];
+    // $this->session->name = $userData['name'];
+    // $this->session->profileImage = $userData['profile_image'];
+    // $this->session->authenticationId=$authenticationData['autorization_id'];
+    // echo "admin  ". $this->session->username;
+ // $this->session->s_user_id = $authenticationData['id'];
+ $this->session->s_f_id= $authenticationData['f_id'];
+            // $this->session->s_username = $authenticationData['username']; 
+            // $this->session->s_type = $authenticationData['type']; 
+            // $this->session->auto_logout = $authenticationData['auto_logout_status']; 
+            // $this->session->s_authorization_id = $authenticationData['authorization_id'];
+    redirect ('super_admin/dashboard');
+    break;
+    ##for admin 
+    case 2:
             $this->session->user_id = $authenticationData['id'];
             $this->session->username = $authenticationData['username']; 
             $this->session->type = $authenticationData['type']; 
@@ -83,33 +112,9 @@ class Login extends MX_Controller
             $this->session->sales_graph=1;
             $this->session->ticket_graph=0;
             $this->session->payment_graph=1;
-
-
-// $this->session->name = '';
- #default value
-// $this->session->profileImage = '';
- #default value
-$userData = '';
-switch ($authenticationData['authorization_id']){
-    case 1:
-#got for admin user at employ table & check for authentication ID and get school id
-    // $userData = $this->Login_model->getEmployDetails($authenticationData['user_id']);
-    // $this->session->SchoolId = $userData['school_id'];
-// $this->session->organizationName = $userData['organization_name'];
-    // $school_name= modules::run('admin/admin/getSchoolName',$this->session->SchoolId);
-    // $this->session->SchoolName =$school_name['organization_name'];
-    // $this->session->name = $userData['name'];
-    // $this->session->profileImage = $userData['profile_image'];
-    // $this->session->authenticationId=$authenticationData['autorization_id'];
-    // echo "admin  ". $this->session->username;
-
-    redirect ('super_admin/dashboard');
-    break;
-    ##for admin 
-    case 2:
     
     redirect ('home/dashboard');
-    break;
+    // break;
     case 3:
     redirect ('home/dashboard');
     break;

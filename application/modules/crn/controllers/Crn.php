@@ -29,6 +29,7 @@ function add_crn_process()
   $email = strip_tags($this->input->post('email',true));
   $mobile = strip_tags($this->input->post('mobile',true));
   $city = strip_tags($this->input->post('city',true));
+  $gender = strip_tags($this->input->post('gender',true));
   
   $location = strip_tags($this->input->post('address',true));
   $pincode = strip_tags($this->input->post('pincode',true));
@@ -58,6 +59,7 @@ function add_crn_process()
     'pincode'=>$pincode,
     'f_id'=>$f_id,
     'city'=>$city,
+    'gender'=>$gender,
     'created_at'=>$date
   );
  $addCrn= $this->Crn_model->insert('table_crn',$crnParams);
@@ -305,6 +307,7 @@ function customer_info($customer_id)
   //  $this->load->view('header');
   //  $this->load->view('w');
   //  $this->load->view('footer');
+  $data['title']="CUSTOMER DETAILS";
   $f_id=$this->session->f_id;
    $id=$customer_id;
    ##get information by customer id

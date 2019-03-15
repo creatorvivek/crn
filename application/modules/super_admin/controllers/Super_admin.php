@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Super_admin extends MY_Controller
+class Super_admin extends Super_admin_controller
 {
 
  function __construct()
@@ -23,27 +23,7 @@ function dashboard_counting()
   // $staff_id=$this->session->staff_id;
   // $group_id=$this->session->group_id;
   $data['total_seller']=$this->Super_admin_model->counting('table_seller');
-  // $activeCustomerParam=array(
 
-  //   'status'=>1,
-  //   'f_id'=>$f_id
-  // );
-  // $pendingInvoiceCountParams=array(
-  //   'f_id'=>$f_id,
-  //   'status'=>'pending'
-  // );
-  //  $paidInvoiceCountParams=array(
-  //   'f_id'=>$f_id,
-  //   'status'=>'paid'
-  // );
-  //   $partiallyInvoiceCountParams=array(
-  //   'f_id'=>$f_id,
-  //   'status'=>'partially'
-  // );
-  // $totalsellerCount=modules::run('api_call/api_call/call_api',''.api_url().'Super_admin/sellerCount',0,'GET');
-  // $data['totalsellerCount']=$totalsellerCount['data'];
-  // $totalCustomerCount=modules::run('api_call/api_call/call_api',''.api_url().'super_admin/customerCount',0,'GET');
-  // $data['totalCustomerCount']=$totalCustomerCount['data'];
 
   echo json_encode($data);
 // die;
@@ -79,7 +59,7 @@ function add_seller()
 }
 function add()
 {
-  $super_admin_id=$this->session->f_id;
+  $super_admin_id=$this->session->s_f_id;
     $name = strip_tags($this->input->post('name',1));
    
   $email = strip_tags($this->input->post('email',1));
@@ -212,7 +192,8 @@ $seller_id=$this->Super_admin_model->insert('table_seller',$params);
       'f_id'=>$super_admin_id,
       'module'=>'user credential',
     );
-    $sms=modules::run('sms/sms/send_sms_notification',$smsParam);
+    // $sms=modules::run('sms/sms/send_sms_notification',$smsParam);
+    $this->send_sms_notification($smsParam);
     ##send email to seller
      $emailParam=array(
       'email'=>$email,
@@ -221,7 +202,7 @@ $seller_id=$this->Super_admin_model->insert('table_seller',$params);
       'f_id'=>$super_admin_id,
       'module'=>'user credential',
     );
-     $email=modules::run('email/email/send_email_notification',$emailParam);
+     // $email=modules::run('email/email/send_email_notification',$emailParam);
     ##insert blank value in seller setting table becaz it is used in update time when seller used his panel
     // $sellerSettingParams=array(
       
@@ -250,51 +231,7 @@ $seller_id=$this->Super_admin_model->insert('table_seller',$params);
 // $addStaff=$this->Staff_model->insert('table_staff',$params);
 
 }
-function tree()
-{
 
-$this->db->select('*');
-$this->db->from('seller');
-$row=$this->db->get()->result_array();
-// var_dump($row);
-// echo json_encode($row);
-// die;
-for($i=0;$i<count($row);$i++)
-{
- $sub_data["id"] = $row[$i]["id"];
- $sub_data["name"] = $row[$i]["name"];
- $sub_data["text"] = $row[$i]["name"];
- // $sub_data["email"] = $row[$i]["email"];
- $sub_data["parent_f_id"] = $row[$i]["parent_f_id"];
- $data[] = $sub_data;
-}
-foreach($data as $key => &$value)
-{
- $output[$value["id"]] = &$value;
-}
-foreach($data as $key => &$value)
-{
- if($value["parent_f_id"] && isset($output[$value["parent_f_id"]]))
- {
-  $output[$value["parent_f_id"]]["nodes"][] = &$value;
- }
-}
-foreach($data as $key => $value)
-{
- if($value["email"] && isset($output[$value["parent_f_id"]]))
- {
-  $output[$value["email"]]["nodes"][] = $value;
- }
-}
-foreach($data as $key => &$value)
-{
- if($value["parent_f_id"] && isset($output[$value["parent_f_id"]]))
- {
-  unset($data[$key]);
- }
-}
-echo json_encode($data);
-}
 
 
 function edit($id)
@@ -319,7 +256,7 @@ $data['staff']=$this->Super_admin_model->select_staff('table_login',$staffIdCond
     $this->form_validation->set_rules('name','Name','required');
     if($this->form_validation->run() )     
     {   
-      $f_id=$this->session->f_id;
+      $f_id=$this->session->s_f_id;
       $name = strip_tags($this->input->post('name',1));
       
             // 'username'=>$this->input->post('username'),
@@ -397,7 +334,85 @@ $data['staff']=$this->Super_admin_model->select_staff('table_login',$staffIdCond
 else
   show_error('The id you are trying to edit does not exist.');
 } 
+function send_sms_notification($params)
+{
 
+
+$mobile=$params['mobile'];
+$username=$params['username'];
+$module=$params['module'];
+$name='';
+$password=$params['password'];
+$f_id=$params['f_id'];
+$url=base_url();
+ $templateParams=array('module'=>$module,'f_id'=>$f_id);
+   
+    $fetchtemplateSms=$this->Super_admin_model->select('table_sms_template',$templateParams,array('context'));
+
+    $context=$fetchtemplateSms[0]['context'];
+    $contextString=array('{username','{password','{name','{url','}');
+    $ReplaceString=array($username,$password,$name,$url,'');
+    $message=str_replace($contextString,$ReplaceString,$context);
+    $smsParams=array('f_id'=>$f_id,'mobile'=>$mobile,'message'=>$message);
+    $this->sendSms($mobile,$message);
+
+}
+
+
+
+function sendSms($mobile,$message)
+  {
+##get authentication key and information for sms gateway
+   // $input=$this->post();
+   // $message=$input['message'];
+   // $to=$input['mobile'];
+   // $f_id=$input['f_id'];
+   // $condition=array('f_id'=>$f_id);
+    $f_id=$this->session->s_f_id;
+    $condition=array('f_id'=>$f_id);
+    $getInfoSmsGateway=$this->Super_admin_model->select('table_sms_configuration',$condition,array('sender_id','auth_key','url','route'));
+    // $infoSmsGateway=json_decode($getInfoSmsGateway,1);
+    // print_r($getInfoSmsGateway);
+    // die;
+    $senderId = $getInfoSmsGateway[0]['sender_id'];
+    $authKey = $getInfoSmsGateway[0]['auth_key'];
+    $url  =  $getInfoSmsGateway[0]['url'];
+
+
+    $route = $getInfoSmsGateway[0]['route'];
+    $postData = array(
+      'authkey' => $authKey,
+      'mobiles' => $mobile,
+      'message' => $message,
+      'sender' => $senderId,
+      'route' => $route
+    );
+    // print_r($postData);
+    $ch = curl_init();
+    curl_setopt_array($ch, array(
+      CURLOPT_URL => $url,
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_POST => true,
+      CURLOPT_POSTFIELDS => $postData
+//,CURLOPT_FOLLOWLOCATION => true
+    ));
+    $output = curl_exec($ch);
+    // print_r($output);die;
+       log_message('debug', 'sms is sent id');
+    curl_close($ch);
+    $smslog=array(
+      'mobile'=>$mobile,
+      'message'=>$message,
+      'sender'=>$senderId,
+      'f_id'=>$f_id,
+     
+      'created_at'=>date('Y-m-d H-i-s')
+
+    );
+    $insertInfo=$this->Super_admin_model->insert('table_sms_log',$smslog);
+    
+    // echo json_encode($output);
+  }
 function test()
 {
    // $smsParam=array(
@@ -412,6 +427,17 @@ function test()
   // echo $this->session->f_id;
   $this->output->enable_profiler(TRUE);
 }
+function logout()
+{
 
+  $this->session->unset_userdata('s_f_id');
+  // $this->session->unset_userdata('s_u_id');
+ 
+  // $this->session->unset_userdata('s_authorization_id');
+  // $this->session->unset_userdata('group_id');
+
+  $this->session->sess_destroy();
+  redirect('login');
+}
 }
 ?>	

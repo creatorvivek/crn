@@ -539,9 +539,9 @@ $('.amount'+id).val(obj.selling_price);
 
 var new_row = '<tr id="row'+count+'">'+
 '<td class="text-center"><input type="hidden" name="item_name[]" value="'+obj.item_name +'">'+obj.item_name +'</td>'+
-'<td class="text-center><input type="text" class="text-center" name="stock" readonly value="'+obj.quantity +'">'+obj.quantity +'  (<small class="small_unit">'+obj.unit+'</small>)</td>'+
+'<td class="text-center><input type="text" class="text-center" name="stock" readonly value="'+obj.quantity_for_sale +'">'+obj.quantity_for_sale +'  (<small class="small_unit">'+obj.unit+'</small>)</td>'+
 '<td class="text-center">'+
-'<input type="text" min=0 max="'+obj.quantity +'"  name="qty[]"   value="1"  onkeypress="return isNumberKey(event)"  onkeyup="changeQuantity('+count+')" class="text-center qty'+count+'" ><br><small class="small_unit">'+obj.unit+'</small></td>'+
+'<input type="text" min=0 max="'+obj.quantity_for_sale +'"  name="qty[]"   value="1"  onkeypress="return isNumberKey(event)"  onkeyup="changeQuantity('+count+')" class="text-center qty'+count+'" ><br><small class="small_unit">'+obj.unit+'</small></td>'+
 
 
                           // '<td class="text-center taxAmount">'+d +'</td>'+

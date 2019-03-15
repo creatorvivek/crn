@@ -100,8 +100,9 @@
                 </div>  
               </div>
               <div role="tabpanel" class="tab-pane animated fadeInRight" id="settings_animation_2">
+                <br>
                <div class="table-responsive">
-              <table class="table table-bordered table-striped table-hover js-basic-example1 dataTable">
+              <table class="table table-bordered table-striped table-hover  dataTable js-exportable">
                 <thead>
                   <tr>
                     <!-- <th>PAYMENT ID</th> -->
@@ -173,6 +174,16 @@
       </div>
     </div>
   </div>
+     <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/jquery.dataTables.js"></script>
+    <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+
+    <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
+    <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
+    <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
+    <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
+    <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
+    <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
+    <script src="<?= base_url() ?>assets/admin/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
 <script type="text/javascript">
 $(document).ready( function () {
 $('.js-basic-example1').DataTable(
@@ -182,7 +193,14 @@ $('.js-basic-example1').DataTable(
 });
 } );
 
-  
+   $('.js-exportable').DataTable({
+        dom: 'Bfrtip',
+        responsive: true,
+        title:'LEDGER',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+    });
 </script>
  
 

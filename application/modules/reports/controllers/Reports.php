@@ -12,7 +12,63 @@ class Reports extends MY_Controller
 
 
 
+function profit_analysis()
+{
+  $f_id=$this->session->f_id;
+  $condition=array('f_id'=>$f_id);  
+  if ($_SERVER['REQUEST_METHOD'] == 'POST' ) {
+    $date_range = explode(' - ',$this->input->post('date_range'));
+    $start_date = date_change_db($date_range[0]);
 
+
+    $end_date = date_change_db($date_range[1]);
+
+    $sales_sum=$this->Reports_model->report('table_sales',array("sum(total) as 'sell_total'"),$condition,$start_date,$end_date,'',$coloumn='created_at');
+    $data['sales_sum']=$sales_sum[0]['sell_total'];
+  // print_r($data['sumSales']);die;
+    $purchase_sum=$this->Reports_model->report('table_purchase',array("sum(total_purchase_price) as 'purchase_price'","sum(quantity_for_sale*purchase_price) as stock_remain"),$condition,$start_date,$end_date,'',$coloumn='created_at');
+    $data['purchase_sum']=$purchase_sum[0]['purchase_price'];
+    $stockReaminingPrice=$purchase_sum[0]['stock_remain'];
+    $data['profit']=$data['sales_sum']-$data['purchase_sum']+$stockReaminingPrice;
+  // print_r($data['purchase_sum']);die;
+// report($table_name,$display_contents,$condition,$start_date='',$end_date='',$status='',$coloumn='created_at')
+  }
+  $data['_view'] = 'profitgraph';
+  $this->load->view('index.php',$data);
+
+}
+
+function profit_graph()
+{
+
+ $f_id=$this->session->f_id;
+ $condition=array('f_id'=>$f_id);
+  $sales_sum=$this->Reports_model->data_between_date('table_sales_details',array("sum(price-(quantity*purchase_price)) as 'profit'","sum(price) as sales","MONTHNAME(created_at) as month"),$condition,'','',$group_by='MONTH',$order_by='MONTH');
+  // echo '<pre>';
+  // print_r($sales_sum);
+  echo json_encode($sales_sum);
+
+}
+
+function profit_graph_show()
+{
+
+   $data['_view'] = 'profit_graph';
+  $this->load->view('index.php',$data);
+}
+function sales_analysis()
+{
+  $f_id=$this->session->f_id;
+
+  $condition=array('f_id'=>$f_id);  
+  $purchase_condition='purchase_price';
+  $selling_condition='selling_price';
+  $sumPurchase=$this->Reports_model->salesAnalysis('table_item_graph',$condition,$purchase_condition);
+  $sumSales=$this->Reports_model->salesAnalysis('table_item_graph',$condition,$selling_condition);
+  
+  print_r($sumPurchase);
+  print_r($sumSales);
+}
 
 function invoice_report()
 {
@@ -36,7 +92,7 @@ function invoice_report()
 
     );
 
-   $invoice_report=$this->Reports_model->select('table_invoices',$invoiceParam,array('id','name','mobile','email','f_name','f_mobile','f_email','f_logo','f_address','address','amount','tax','created_at','invoice_id','caf_id','total'));
+    $invoice_report=$this->Reports_model->select('table_invoices',$invoiceParam,array('id','name','mobile','email','f_name','f_mobile','f_email','f_logo','f_address','address','amount','tax','created_at','invoice_id','caf_id','total'));
     // $this->
     // try
     // {
@@ -78,7 +134,7 @@ function invoice_report()
 
   );
 
-$invoice_report=$this->Reports_model->select('table_invoices',$invoiceParam,array('id','name','mobile','email','f_name','f_mobile','f_email','f_logo','f_address','address','amount','tax','created_at','invoice_id','caf_id','total'));
+   $invoice_report=$this->Reports_model->select('table_invoices',$invoiceParam,array('id','name','mobile','email','f_name','f_mobile','f_email','f_logo','f_address','address','amount','tax','created_at','invoice_id','caf_id','total'));
    // $invoice_list= modules::run('api_call/api_call/call_api',''.api_url().'account/invoiceList',$invoiceParam,'POST');
   //  try
   //  {
@@ -104,17 +160,17 @@ $invoice_report=$this->Reports_model->select('table_invoices',$invoiceParam,arra
    // var_dump($invoice_list['data'][0]['caf_id']);
   // if($invoice_list['status']=='success')
   // {
-    $data['invoices']=$invoice_report;
+   $data['invoices']=$invoice_report;
     // print_r($data['invoices']);die;
   // }
   // else 
   // {
   //   $data['invoices']=[];
   // }
-  $data['_view'] = 'invoice_report';
+   $data['_view'] = 'invoice_report';
 
-  $this->load->view('index.php',$data);
-}
+   $this->load->view('index.php',$data);
+ }
 }
 
 
@@ -272,7 +328,7 @@ function user_ledger_report()
       'end_date'=>''
     );
     $ledgerResults =modules::run('api_call/api_call/call_api',''.api_url().'account/ledgerReportoUser',$ledgerParam,'POST');
-   
+
     if($ledgerResults['status']=='success')
     {
       $data['ledger']=$ledgerResults['data'];
@@ -338,26 +394,26 @@ function reciept_report()
   $recieptsReportParams=array('f_id'=>$f_id);
   $reciepts =modules::run('api_call/api_call/call_api',''.api_url().'account/recieptReport',$recieptsReportParams,'POST');
   try
+  {
+    if($reciepts=='')
     {
-      if($reciepts=='')
-      {
-        throw new Exception("server down", 1);
-        log_error("task/addtask function error");
+      throw new Exception("server down", 1);
+      log_error("task/addtask function error");
 
-      }
-      if(isset($reciepts['error']))
-      {
-        throw new Exception($reciepts['error'], 1);
-      }
     }
-    catch(Exception $e)
+    if(isset($reciepts['error']))
     {
-      die(show_error($e->getMessage()));
+      throw new Exception($reciepts['error'], 1);
     }
-    catch(Exception $e)
-    {
-      die(show_error($e->getMessage()));
-    }
+  }
+  catch(Exception $e)
+  {
+    die(show_error($e->getMessage()));
+  }
+  catch(Exception $e)
+  {
+    die(show_error($e->getMessage()));
+  }
   if($reciepts['status']=='success')
   {
     $data['reciepts']=$reciepts['data'];
@@ -388,46 +444,7 @@ function reciept_report()
 
 // }
 
-function profit_analysis()
-{
-  $f_id=$this->session->f_id;
-$condition=array('f_id'=>$f_id);  
-  if ($_SERVER['REQUEST_METHOD'] == 'POST' ) {
-  $date_range = explode(' - ',$this->input->post('date_range'));
-  $start_date = date_change_db($date_range[0]);
-  
 
-  $end_date = date_change_db($date_range[1]);
-
-$sales_sum=$this->Reports_model->report('table_sales',array("sum(total) as 'sell_total'"),$condition,$start_date,$end_date,'',$coloumn='created_at');
-$data['sales_sum']=$sales_sum[0]['sell_total'];
-  // print_r($data['sumSales']);die;
-  $purchase_sum=$this->Reports_model->report('table_purchase',array("sum(total_purchase_price) as 'purchase_price'","sum(quantity_for_sale*purchase_price) as stock_remain"),$condition,$start_date,$end_date,'',$coloumn='created_at');
-  $data['purchase_sum']=$purchase_sum[0]['purchase_price'];
-  $stockReaminingPrice=$purchase_sum[0]['stock_remain'];
-           $data['profit']=$data['sales_sum']-$data['purchase_sum']+$stockReaminingPrice;
-  // print_r($data['purchase_sum']);die;
-// report($table_name,$display_contents,$condition,$start_date='',$end_date='',$status='',$coloumn='created_at')
-                                              }
-$data['_view'] = 'profitgraph';
-  $this->load->view('index.php',$data);
-
-}
-
-
-function sales_analysis()
-{
-  $f_id=$this->session->f_id;
- 
-  $condition=array('f_id'=>$f_id);  
-  $purchase_condition='purchase_price';
-  $selling_condition='selling_price';
-  $sumPurchase=$this->Reports_model->salesAnalysis('table_item_graph',$condition,$purchase_condition);
-  $sumSales=$this->Reports_model->salesAnalysis('table_item_graph',$condition,$selling_condition);
-  
-  print_r($sumPurchase);
-  print_r($sumSales);
-}
 
 /*all function end*/
 }

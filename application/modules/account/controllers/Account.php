@@ -39,7 +39,7 @@ function invoice($params,$particular)
 
 
     );
-    // var_dump($masterInvoiceParams);
+    print_r($masterInvoiceParams);
     $amount=$amount+$particular['price'][$k];
     $data=$this->Account_model->insert('table_master_invoice', $masterInvoiceParams);
     // $insertAccountPariculars=modules::run('api_call/api_call/call_api',''.api_url().'account/insertAccountParticular',$masterInvoiceParams,'POST');
@@ -106,7 +106,7 @@ function invoice($params,$particular)
   // 'username'=>$params[0]['username'],
   // 'caf_id'=>$params[0]['id']
 );
-// var_dump($invoiceParams);die;
+print_r($invoiceParams);die;
  // $collectUserInformation=modules::run('api_call/api_call/call_api',''.api_url().'account/insert_invoice_information',$invoiceParams,'POST');
  $collectUserInformation=$this->Account_model->insert('table_invoices',$invoiceParams);
  // print_r(expression)

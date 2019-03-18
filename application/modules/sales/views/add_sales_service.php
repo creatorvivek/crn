@@ -595,12 +595,9 @@ $.ajax({
 
 var new_row_service = '<tr id="row'+count+'">'+
 '<td class="text-center"><input type="hidden" name="service_name[]" value="'+obj.service_name +'">'+obj.service_name +'</td>'+
-'<td class="text-center><input type="hidden" class="text-center" name="service_validity" readonly value="'+obj.validity +'">validity    (<small class="small_unit">'+obj.validity_unit+'  service </small>)</td>'+
-'<td class="text-center">'+
-// '<input type="hidden" min=0   name="qty[]"   value="1"   ></td>'+
-
+'<td class="text-center"><input type="hidden"  name="service_validity[]"  value="'+obj.validity +'">validity    (<small class="small_unit">'+obj.validity_unit+'  service </small>)</td>'+
 '<td class="text-center"><input type="text" class="form-control text-center discount'+count+'" name="service_discount[]" onkeyup="discount('+count+')" data-input-id="'+count+'" id="discount_id_'+count+'" max="100" min="0"></td>'+
-'<td class="text-center"><input class="form-control text-center amount amount_item'+count+'" type="text" amount-id = "'+count+'" id="amount_'+count+'" value="'+obj.amount+'" name="service_price[]" ></td><input type="hidden" name="service_id[]" class="item_id" value="'+obj.id+'">'+
+'<td class="text-center"><input class="form-control text-center amount amount_item'+count+'" type="text" amount-id = "'+count+'" id="amount_'+count+'" name="service_price[]" value="'+obj.amount+'" " ></td><input type="hidden" name="service_id[]" class="item_id" value="'+obj.id+'">'+
 '<td class="text-center"><button type="button" id="'+count+'" onclick="deleteRow('+count+')" class="btn btn-danger delete_item"><i class="material-icons">delete</i></button></td>'+
 '<input type="hidden" class="amount_hidden'+count+'" value="'+obj.amount +'" ><input type="hidden"  name="service_unit[]" value="'+obj.validity_unit +'" ></tr>';
                           // console.log(new_row_service);

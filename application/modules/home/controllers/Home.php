@@ -98,67 +98,13 @@ $totalPendingInvoiceCredit=modules::run('api_call/api_call/call_api',''.api_url(
 // die;
 }
 
-// function listUsers()
-// {
-//   // $id=$this->session->id;
-//   $id=1;
-//   $params=array(
-//     'parent_id'=>$id
-
-//   );
-//   $get_data=modules::run('api_call/api_call/call_api',''.api_url().'admin/listChild',$params,'POST');
-//     // var_dump($get_data);
-//   if($get_data['status']=='success')
-//   {
-//     $data['users']=$get_data['data'];
-//     $data['_view'] = 'userList';
-//     $this->load->view('index',$data);
-//   }
-//   else
-//   {
-//     echo ($get_data['error']);
-//   }
-
-// }
-// ##if 4 franchizy under 1 so by using parent id this will fetch all 4 
-// function listChildUsers($id)
-// {
-
-//   $params=array(
-//     'parent_id'=>$id
-
-//   );
-//   $get_data=modules::run('api_call/api_call/call_api',''.api_url().'admin/listChild',$params,'POST');
-//     // var_dump($get_data);
-//   if($get_data['status']=='success')
-//   {
-//     $data['users']=$get_data['data'];
-//     $data['_view'] = 'userList';
-//     $this->load->view('index',$data);
-//   }
-//   else
-//   {
-//     echo($get_data['error']);
-//   }
-// }
-
-
-
-
-
-
-
-
-
-
-
 
 function stock_count()
 {
   $f_id=$this->session->f_id;
   // $f_id=1;
     $totalStockParam=array('f_id'=>$f_id);
-    $data['total_stock']=$this->Home_model->sum_column('table_purchase',$totalStockParam,'quantity');
+    $data['total_stock']=$this->Home_model->sum_column('table_purchase',$totalStockParam,'quantity_for_sale');
   
     $sellStockParam=array('f_id'=>$f_id);
     // $data['sell_stock']= $this->Home_model->sum_column('table_sales_details',$sellStockParam,'quantity');

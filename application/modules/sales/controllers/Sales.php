@@ -182,7 +182,7 @@ class Sales extends MY_Controller
  function add_sales_service()
   {
         
-     print_r($this->input->post());die;
+     // print_r($this->input->post());die;
     $data['title'] = "ADD SALES & SERVICE";
     $f_id = $this->session->f_id;
     $staff_id = $this->session->staff_id;
@@ -203,6 +203,16 @@ class Sales extends MY_Controller
     $total = strip_tags($this->input->post('total', 1));
     $discount=$this->input->post('discount', 1);
     $method=$this->input->post('method', 1);
+
+
+      ##for service
+     $service_amount = $this->input->post('service_price',1);
+     $service_id = $this->input->post('service_id',1);
+     // print_r($service_id);die;
+      $service_name = $this->input->post('service_name',1);
+      $service_discount=$this->input->post('service_discount',1);
+      $service_unit=$this->input->post('service_unit',1);
+      $service_validity=$this->input->post('service_validity',1);
   // $total=22;
     // print_r($item_name);die;
     $orderParams = array('f_id' => $f_id);
@@ -227,7 +237,7 @@ class Sales extends MY_Controller
 
       $condition = array('id' => $item_id[$i]);
       ##fetch item quantity 
-      $quantity=$this->Sales_model->select('table_purchase',$condition,array('quantity_for_sale','purchase_price','item_id'));
+      $quantity=$this->Sales_model->select('table_purchase',$condition,array('quantity_for_sale','purchase_price','item_id','quantity_out'));
       $reamaning_item=$quantity[0]['quantity_for_sale']-$qty[$i];
       $quantity_out=$quantity[0]['quantity_out'];
       ##update how much quantity out and how much reamaning for sales
@@ -268,34 +278,60 @@ class Sales extends MY_Controller
 
     }
     #for service
-    for($j = 0; $j < count($service_id); $i++)
+    if($service_id)
+    {
+    for($j = 0; $j < count($service_id); $j++)
     {
        ##inserts sale details
        // $item_id = $this->input->post('item_id', 1);
-     $service_amount = $this->input->post('service_price', 1);
-      $service_name = $this->input->post('service_name', 1);
-      $service_discount=$this->input->post('service_discount', 1);
+    
       $serviceDetailsParam = array(
-        'particular' => $service_id[$i],
-        'price' => $service_amount[$i],
+        'particular' => $service_id[$j],
+        'price' => $service_amount[$j],
         'f_id' => $f_id,
-        'quantity'=>$qty[$i],
+        'quantity'=>$service_validity[$j],
         'order_no' => $order_no,
         'created_at' =>$date,
-        'purchase_price'=>$quantity[0]['purchase_price'],
-        'discount_percent'=>$discount[$i],
+        'purchase_price'=>$service_amount[$j],
+        'discount_percent'=>$service_discount[$j],
         'type'=>2
       );
       
-      $addSalesDetails = $this->Sales_model->insert('table_sales_details', $serviceDetailsParam);
+      $addServiceDetails = $this->Sales_model->insert('table_sales_details', $serviceDetailsParam);
     }
+  }
+
+    $particular=array();
+    $particular_amount=array();
+    $particular_qty=array();
+    $particular_unit=array();
+    if(!$service_id)
+    {
+      $service_name=array();
+      $service_amount=array();
+      $service_validity=array();
+      $service_unit=array();
+    }
+    
+    $array3=array_merge($item_name,$service_name);
+    $array4=array_merge($amount,$service_amount);
+    $array5=array_merge($qty,$service_validity);
+    $array6=array_merge($unit,$service_unit);
+    array_push($particular,$array3);
+    array_push($particular_amount,$array4);
+    array_push($particular_qty,$array5);
+    array_push($particular_unit,$array6);
+    // array_push($particular,$item_name);
+    // echo '<pre>';
+    // print_r($particular_amount);
     $particularParam = array(
-      'particular' => $item_name,
-      'price' => $amount,
-      'quantity'=>$qty,
-      'unit'=>$unit
+      'particular' => $particular[0],
+      'price' => $particular_amount[0],
+      'quantity'=>$particular_qty[0],
+      'unit'=>$particular_unit[0]
     );
-    // print_r($particularParam);die;
+    // die;
+    print_r($particularParam);
     $invoiceParams = array(
       'customer_name' => $customer_name, 'mobile' => $mobile, 'email' => $email, 'f_id' => $f_id, 'created_by' => $staff_id, 'created_at' => $date, 'order_id' => $order_no, 'customer_id' => $customer_id,'c_city'=>$city,'c_pincode'=>$pincode,'address'=>$address
 
@@ -906,11 +942,15 @@ $this->load->view('index', $data);
 
 function test()
 {
-// $condition=array('sales.f_id'=>$this->session->f_id);
-//     $table_row='created_at';
-//       $itemList = $this->Sales_model->sales_list('table_sales',$condition,array('customer_name', 'sales.email', 'sales.mobile', 'total', 'staff.name as staff_name', 'sales.created_at', 'sales.order_id','customer_id'));
-//       print_r($itemList);
-  $this->load->view('reciept_view2');
+$particular=array();
+$item_name=array("1","2","3","4");
+$service_name=array();
+    $particular_amount=array();
+    $particular_qty=array();
+    $particular_unit=array();
+    $array3=array_merge($item_name,$service_name);
+    array_push($particular,$array3);
+    print_r($particular);
 }
 
 
